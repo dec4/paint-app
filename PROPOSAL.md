@@ -7,7 +7,7 @@ For the GUI: <br />
 http://openframeworks.cc/documentation/ofxGui/ <br />
 The graphics module (in particular, ofImage) can be used for image modifications: <br />
 http://openframeworks.cc/documentation/graphics/ofImage/ <br />
-To help get data regarding mouse movement for drawing, I'll use parts of the events module: <br />
+Parts of the events module could also be used to get data such as mouse movement for drawing: <br />
 http://openframeworks.cc/documentation/events/ <br />
 I also found files posted to GitHub for a workshop on drawing using OpenFrameworks: <br />
 https://github.com/ofZach/drawing-examples <br />
