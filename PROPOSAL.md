@@ -3,9 +3,11 @@
 My idea for the final project is to create a drawing application (similar to MS Paint). The user would be able to draw something onto a canvas using their mouse. Some main features that I would like to include are saving and loading image files, options for different brush types (pencil, marker, eraser, etc.), and sliders for settings such as opacity, size, and color.  <br />
 ### Resources <br />
 **Links to portions of the OpenFrameworks documentation that I suspect will be useful for this project:** <br />
+For the GUI: <br />
+http://openframeworks.cc/documentation/ofxGui/ <br />
 The graphics module (in particular, ofImage) can be used for image modifications: <br />
 http://openframeworks.cc/documentation/graphics/ofImage/ <br />
-To get data regarding mouse movement for drawing, I'll use parts of the events module: <br />
+To help get data regarding mouse movement for drawing, I'll use parts of the events module: <br />
 http://openframeworks.cc/documentation/events/ <br />
 I also found files posted to GitHub for a workshop on drawing using OpenFrameworks: <br />
 https://github.com/ofZach/drawing-examples <br />
