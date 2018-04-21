@@ -10,9 +10,14 @@ class ofApp : public ofBaseApp {
 		void update();
 		void draw();
 
-		ofParameterGroup parameters;
-	    ofParameter<float> radius;
-	    ofParameter<ofColor> color;
+		ofPath all_lines_;
+		ofPolyline* current_line_;
+
+		// Click once to put down pen, drag, click again to release
+		bool drawing = false;
+
+		void mousePressed(int x, int y, int button);
+		void mouseMoved(int x, int y );
 
 	    shared_ptr<ToolGui> gui;
 		
@@ -41,5 +46,27 @@ class ToolGui : public ofBaseApp {
 		void gotMessage(ofMessage msg);
 		
 };
+
+*/
+
+/* DRAWING REFERENCE: http://openframeworks.cc/ofBook/chapters/lines.html
+
+void ofApp::setup(){
+    ofBackground(0,0,0);
+}
+
+void ofApp::draw(){
+    line.draw();
+}
+
+void ofApp::mouseDragged(int x, int y, int button){
+    ofPoint pt;
+    pt.set(x,y);
+    line.addVertex(pt);
+}
+
+void ofApp::mousePressed(int x, int y, int button){
+    line.clear();
+}
 
 */

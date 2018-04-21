@@ -2,7 +2,8 @@
 
 
 void ofApp::setup() {
-
+	all_lines_.setMode(ofPath::POLYLINES);
+	all_lines_.newSubPath();
 }
 
 void ofApp::update() {
@@ -10,7 +11,30 @@ void ofApp::update() {
 }
 
 void ofApp::draw() {
-	
+	all_lines_.draw();
+}
+
+void ofApp::mousePressed(int x, int y, int button) {
+	if (!drawing) {
+		drawing = true;
+
+		ofPoint pt;
+		pt.set(x,y);
+		all_lines_.lineTo(pt);
+	} else {
+		drawing = false;
+		all_lines_.close();
+	}
+}
+
+void ofApp::mouseMoved(int x, int y ){
+	if (!drawing) {
+		return;
+	} else {
+		ofPoint pt;
+		pt.set(x,y);
+		all_lines_.lineTo(pt);
+	}
 }
 
 
