@@ -11,11 +11,11 @@ void ToolGui::setup() {
     // ^SAME FOR DRAWING TOOL?
 
     gui_.setup();   
-    gui_.add(radius_.setup("radius", 140, 10, 150));
-    gui_.add(hue_.setup("hue", 140, 0, 255));
-    gui_.add(saturation_.setup("saturation", 200, 0, 255));
-    gui_.add(brightness_.setup("brightness", 140, 0, 255));
-    gui_.add(alpha_.setup("alpha", 200, 0, 255));
+    gui_.add(radius_.setup("radius", 75, 10, 150));
+    gui_.add(hue_.setup("hue", 125, 0, 255));
+    gui_.add(saturation_.setup("saturation", 255, 0, 255));
+    gui_.add(brightness_.setup("brightness", 255, 0, 255));
+    gui_.add(alpha_.setup("alpha", 255, 0, 255));
 
     // NOTE: create method to reset gui (so that different tools have 
     // different ranges for color, alpha, size, etc.)
@@ -39,17 +39,14 @@ void ToolGui::setup() {
 }
 
 void ToolGui::update() {
-    updateColor();
+    // update color
+    color_.setHsb(hue_, saturation_, brightness_, alpha_);
 }
 
 void ToolGui::draw() {
     ofSetColor(color_);
     ofDrawCircle(0.7*ofGetWidth(), ofGetHeight()/2, radius_);
 	gui_.draw();
-}
-
-void ToolGui::updateColor() {
-    color_.setHsb(hue_, saturation_, brightness_, alpha_);
 }
 
 

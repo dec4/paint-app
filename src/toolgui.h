@@ -35,7 +35,6 @@ class ToolGui : public ofBaseApp {
 		ofColor color_;	// updated by sliders above (hsba)
 		ofColor background_ = ofColor(255, 255, 255);
 
-		void updateColor();
 
 		void choosePencil(bool& pressed);
 		void choosePen(bool& pressed);
