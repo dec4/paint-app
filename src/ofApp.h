@@ -1,13 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxGui.h"
-
-enum DrawingTool {
-	PENCIL,
-	PEN,
-	ERASER
-};
+#include "toolgui.h"
 
 class ofApp : public ofBaseApp {
 
@@ -16,38 +10,18 @@ class ofApp : public ofBaseApp {
 		void update();
 		void draw();
 
-		// Using sliders instead of parameter in order to implement hsba
-		//ofParameterGroup parameters;
-	    //ofParameter<float> radius;
-	    //ofParameter<ofColor> color;
-		ofxFloatSlider radius_;
-		ofxIntSlider hue_;
-		ofxIntSlider saturation_;
-		ofxIntSlider brightness_;
-		ofxIntSlider alpha_;
-		ofxToggle pen_;
-		ofxToggle pencil_;
-		ofxToggle eraser_;
+		ofParameterGroup parameters;
+	    ofParameter<float> radius;
+	    ofParameter<ofColor> color;
 
-        
-	    ofxPanel gui_;
-
-		ofColor color_;	// updated by sliders above (hsba)
-		ofColor background_ = ofColor(255, 255, 255);
-
-		void updateColor();
-
-		void choosePencil(bool& pressed);
-		void choosePen(bool& pressed);
-		void chooseEraser(bool& pressed);
-		void disableCurrent();
-
-		DrawingTool current_tool_ = PENCIL;
+	    shared_ptr<ToolGui> gui;
+		
 };
+
 
 /* STARTER CODE
 
-class ofApp : public ofBaseApp {
+class ToolGui : public ofBaseApp {
 
 	public:
 		void setup();
