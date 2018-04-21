@@ -6,7 +6,6 @@
 enum DrawingTool {
 	PENCIL,
 	PEN,
-	HIGHLIGHTER,
 	ERASER
 };
 
@@ -28,7 +27,6 @@ class ofApp : public ofBaseApp {
 		ofxIntSlider alpha_;
 		ofxToggle pen_;
 		ofxToggle pencil_;
-		ofxToggle highlighter_;
 		ofxToggle eraser_;
 
         
@@ -38,8 +36,13 @@ class ofApp : public ofBaseApp {
 		ofColor background_ = ofColor(255, 255, 255);
 
 		void updateColor();
-		void updateTool();
-		
+
+		void choosePencil(bool& pressed);
+		void choosePen(bool& pressed);
+		void chooseEraser(bool& pressed);
+		void disableCurrent();
+
+		DrawingTool current_tool_ = PENCIL;
 };
 
 /* STARTER CODE

@@ -1,5 +1,5 @@
 obj/linux64/Release/src/main.o: \
- /home/dani/OF/OF/apps/myApps/paint/src/main.cpp \
+ /home/dani/OF/OF/apps/myApps/final-project-dec4/src/main.cpp \
  /home/dani/OF/OF/libs/openFrameworks/ofMain.h \
  /home/dani/OF/OF/libs/openFrameworks/utils/ofConstants.h \
  /home/dani/OF/OF/libs/tess2/include/tesselator.h \
@@ -352,7 +352,7 @@ obj/linux64/Release/src/main.o: \
  /home/dani/OF/OF/libs/openFrameworks/video/ofGstVideoPlayer.h \
  /home/dani/OF/OF/libs/openFrameworks/3d/ofCamera.h \
  /home/dani/OF/OF/libs/openFrameworks/3d/ofEasyCam.h \
- /home/dani/OF/OF/apps/myApps/paint/src/ofApp.h \
+ /home/dani/OF/OF/apps/myApps/final-project-dec4/src/ofApp.h \
  /home/dani/OF/OF/addons/ofxGui/src/ofxGui.h \
  /home/dani/OF/OF/addons/ofxGui/src/ofxToggle.h \
  /home/dani/OF/OF/addons/ofxGui/src/ofxBaseGui.h \
@@ -1103,7 +1103,7 @@ obj/linux64/Release/src/main.o: \
 
 /home/dani/OF/OF/libs/openFrameworks/3d/ofEasyCam.h:
 
-/home/dani/OF/OF/apps/myApps/paint/src/ofApp.h:
+/home/dani/OF/OF/apps/myApps/final-project-dec4/src/ofApp.h:
 
 /home/dani/OF/OF/addons/ofxGui/src/ofxGui.h:
 

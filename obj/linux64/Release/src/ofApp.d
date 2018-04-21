@@ -1,6 +1,6 @@
 obj/linux64/Release/src/ofApp.o: \
- /home/dani/OF/OF/apps/myApps/paint/src/ofApp.cpp \
- /home/dani/OF/OF/apps/myApps/paint/src/ofApp.h \
+ /home/dani/OF/OF/apps/myApps/final-project-dec4/src/ofApp.cpp \
+ /home/dani/OF/OF/apps/myApps/final-project-dec4/src/ofApp.h \
  /home/dani/OF/OF/libs/openFrameworks/ofMain.h \
  /home/dani/OF/OF/libs/openFrameworks/utils/ofConstants.h \
  /home/dani/OF/OF/libs/tess2/include/tesselator.h \
@@ -363,7 +363,7 @@ obj/linux64/Release/src/ofApp.o: \
  /home/dani/OF/OF/addons/ofxGui/src/ofxPanel.h \
  /home/dani/OF/OF/addons/ofxGui/src/ofxLabel.h
 
-/home/dani/OF/OF/apps/myApps/paint/src/ofApp.h:
+/home/dani/OF/OF/apps/myApps/final-project-dec4/src/ofApp.h:
 
 /home/dani/OF/OF/libs/openFrameworks/ofMain.h:
 

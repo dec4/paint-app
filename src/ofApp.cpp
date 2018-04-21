@@ -17,6 +17,9 @@ void ofApp::setup() {
     gui_.add(brightness_.setup("brightness", 140, 0, 255));
     gui_.add(alpha_.setup("alpha", 200, 0, 255));
 
+    // NOTE: create method to reset gui (so that different tools have 
+    // different ranges for color, alpha, size, etc.)
+
 
     // Add listener (below) to all tools then add method so that if tool changes, 
     // all other tools are disabled.
@@ -24,8 +27,12 @@ void ofApp::setup() {
     // and use myToggle.set(false);
     gui_.add(pencil_.setup("pencil", true));
     gui_.add(pen_.setup("pen", false));
-    gui_.add(highlighter_.setup("highlighter", false));
     gui_.add(eraser_.setup("eraser", false));
+
+    // Add listeners
+    pencil_.addListener(this, &ofApp::choosePencil);
+    pen_.addListener(this, &ofApp::choosePen);
+    eraser_.addListener(this, &ofApp::chooseEraser);
 
     ofBackground(background_);
 
@@ -33,7 +40,6 @@ void ofApp::setup() {
 
 void ofApp::update() {
     updateColor();
-    updateTool();
 }
 
 void ofApp::draw() {
@@ -46,9 +52,67 @@ void ofApp::updateColor() {
     color_.setHsb(hue_, saturation_, brightness_, alpha_);
 }
 
-void ofApp::updateTool() {
-    
+
+// NOTE FOR CASES: CREATE VECTOR OF TOGGLES TO LOOP THRU 
+// ALL INSTEAD OF HARD CODING?
+void ofApp::disableCurrent() {
+    switch (current_tool_) {
+        case PENCIL: 
+            pencil_ = false;
+        case PEN:
+            pen_ = false;
+        case ERASER:
+            eraser_ = false;
+    }
 }
+
+
+// Functions to help simulate radio buttons
+
+void ofApp::choosePencil(bool& pressed) {
+    if (!pressed) {
+        return;
+    }
+    // Some tool must always be active, so don't deactivate current tool
+    // CURRENTLY **NOT** WORKING FOR ALL THREE TOOLS
+    if (current_tool_ == PENCIL) {
+        //disableCurrent();
+        pencil_ = true;
+    } else {
+        disableCurrent();
+        current_tool_ = PENCIL;
+        pencil_ = true;
+    }
+}
+
+void ofApp::choosePen(bool& pressed) {
+    if (!pressed) {
+        return;
+    }
+    // Some tool must always be active, so don't deactivate current tool
+    if (current_tool_ == PEN) {
+        pen_ = true;
+    } else {
+        disableCurrent();
+        current_tool_ = PEN;
+        pen_ = true;
+    }
+}
+
+void ofApp::chooseEraser(bool& pressed) {
+    if (!pressed) {
+        return;
+    }
+    // Some tool must always be active, so don't deactivate current tool
+    if (current_tool_ == ERASER) {
+        eraser_ = true;
+    } else {
+        disableCurrent();
+        current_tool_ = ERASER;
+        eraser_ = true;
+    }
+}
+
 
 /* STARTER CODE
 
