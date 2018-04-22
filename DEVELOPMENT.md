@@ -6,4 +6,4 @@ Starting off by implementing the settings window and drawing canvas independentl
   * Problems with keeping the user from unchecking a tool (one should always be active) UNRESOLVED
 * Implementing drawing on canvas
   * ofLine not drawing a line as expected RESOLVED
-   * needed to specify width, color, and fill (false)
+    * needed to specify width, color, and fill (false)
