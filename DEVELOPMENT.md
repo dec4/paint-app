@@ -5,4 +5,5 @@ Starting off by implementing the settings window and drawing canvas independentl
 * Implemented toggles for brush type as radio buttons
   * Problems with keeping the user from unchecking a tool (one should always be active) UNRESOLVED
 * Implementing drawing on canvas
-  * ofLine not drawing a line as expected UNRESOLVED
+  * ofLine not drawing a line as expected RESOLVED
+   * needed to specify width, color, and fill (false)
