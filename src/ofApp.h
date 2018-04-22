@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "toolgui.h"
+#include <stack>
 
 class ofApp : public ofBaseApp {
 
@@ -11,6 +12,8 @@ class ofApp : public ofBaseApp {
 		void draw();
 
 		ofPath all_lines_;
+		std::stack<ofPolyline> canvas_lines_;
+		std::stack<ofPolyline> undo_lines_;
 		ofPolyline* current_line_;
 
 		// Click once to put down pen, drag, click again to release
@@ -18,6 +21,7 @@ class ofApp : public ofBaseApp {
 
 		void mousePressed(int x, int y, int button);
 		void mouseMoved(int x, int y );
+		void mouseExited(int x, int y);
 
 	    shared_ptr<ToolGui> gui;
 		

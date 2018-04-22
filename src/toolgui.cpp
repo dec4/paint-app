@@ -1,8 +1,26 @@
 #include "toolgui.h"
 
 
+//*** GETTERS ***//
+
+ofColor ToolGui::getColor() {
+    return color_;
+}
+
+DrawingTool ToolGui::getTool() {
+    return current_tool_;
+}
+
+int ToolGui::getRadius() {
+    return radius_;
+}
+
+
+
+//*** OPENFRAMEWORKS METHODS ***//
+
 void ToolGui::setup() {
-    // Using sliders (see .h)
+    // Using ofParameter (see .h):
 	//parameters.add(radius.set("radius", 50, 1, 100));
 	//parameters.add(color.setHsb("color (hsba)", 100, 200, 100, 255));
     // compare to rsb: parameters.add(color.set("color",100,ofColor(0,0),255));
@@ -11,7 +29,7 @@ void ToolGui::setup() {
     // ^SAME FOR DRAWING TOOL?
 
     gui_.setup();   
-    gui_.add(radius_.setup("radius", 75, 10, 150));
+    gui_.add(radius_.setup("radius", 75, 5, 100));
     gui_.add(hue_.setup("hue", 125, 0, 255));
     gui_.add(saturation_.setup("saturation", 255, 0, 255));
     gui_.add(brightness_.setup("brightness", 255, 0, 255));
@@ -19,12 +37,10 @@ void ToolGui::setup() {
 
     // NOTE: create method to reset gui (so that different tools have 
     // different ranges for color, alpha, size, etc.)
-
+    // ^ or connect gui w tool object
 
     // Add listener (below) to all tools then add method so that if tool changes, 
     // all other tools are disabled.
-    // ex: circleResolution.addListener(this, &ToolGui::circleResolutionChanged);
-    // and use myToggle.set(false);
     gui_.add(pencil_.setup("pencil", true));
     gui_.add(pen_.setup("pen", false));
     gui_.add(eraser_.setup("eraser", false));
@@ -49,6 +65,8 @@ void ToolGui::draw() {
 	gui_.draw();
 }
 
+
+//*** PRIVATE METHODS ***//
 
 // NOTE FOR CASES: CREATE VECTOR OF TOGGLES TO LOOP THRU 
 // ALL INSTEAD OF HARD CODING?

@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include "ofxGui.h"
 
-enum DrawingTool {
+enum DrawingTool {  // TODO: SHOULD BE INSIDE A CLASS
 	PENCIL,
 	PEN,
 	ERASER
@@ -16,7 +16,13 @@ class ToolGui : public ofBaseApp {
 		void update();
 		void draw();
 
-		// Using sliders instead of parameter in order to implement hsba
+		ofColor getColor();
+		DrawingTool getTool();
+		int getRadius();
+
+	private:
+
+		// Using sliders for now instead of parameter in order to implement hsba
 		//ofParameterGroup parameters;
 	    //ofParameter<float> radius;
 	    //ofParameter<ofColor> color;

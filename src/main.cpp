@@ -6,6 +6,9 @@
 
 // Reference: OpenFrameworks example events/multiWindowExample
 
+// USE STACK: UNDO AND REDO
+// ONE FOR CURRENT AND ONE FOR UNDO (REDO COMES FROM LAST ADDED TO UNDO)
+
 int main( ) {
 
 	/*
