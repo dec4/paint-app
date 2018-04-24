@@ -29,7 +29,7 @@ void ToolGui::setup() {
     // ^SAME FOR DRAWING TOOL?
 
     gui_.setup();   
-    gui_.add(radius_.setup("radius", 75, 5, 100));
+    gui_.add(radius_.setup("radius", .5, 2, 5));
     gui_.add(hue_.setup("hue", 125, 0, 255));
     gui_.add(saturation_.setup("saturation", 255, 0, 255));
     gui_.add(brightness_.setup("brightness", 255, 0, 255));
