@@ -7,3 +7,6 @@ Starting off by implementing the settings window and drawing canvas independentl
 * Implementing drawing on canvas
   * ofLine not drawing a line as expected RESOLVED
     * needed to specify width, color, and fill (false)
+* Integrating tools and canvas
+  * Using ofPath means changing anything in tools will change ALL lines UNRESOLVED
+  * Creatiing custom object to hold all data of each line
