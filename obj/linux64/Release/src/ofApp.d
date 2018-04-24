@@ -362,7 +362,8 @@ obj/linux64/Release/src/ofApp.o: \
  /home/dani/OF/OF/addons/ofxGui/src/ofxGuiGroup.h \
  /home/dani/OF/OF/addons/ofxGui/src/ofxButton.h \
  /home/dani/OF/OF/addons/ofxGui/src/ofxPanel.h \
- /home/dani/OF/OF/addons/ofxGui/src/ofxLabel.h
+ /home/dani/OF/OF/addons/ofxGui/src/ofxLabel.h \
+ /home/dani/OF/OF/apps/myApps/final-project-dec4/src/appline.h
 
 /home/dani/OF/OF/apps/myApps/final-project-dec4/src/ofApp.h:
 
@@ -1125,3 +1126,5 @@ obj/linux64/Release/src/ofApp.o: \
 /home/dani/OF/OF/addons/ofxGui/src/ofxPanel.h:
 
 /home/dani/OF/OF/addons/ofxGui/src/ofxLabel.h:
+
+/home/dani/OF/OF/apps/myApps/final-project-dec4/src/appline.h:

@@ -2,7 +2,9 @@
 
 #include "ofMain.h"
 #include "toolgui.h"
+#include "appline.h"
 #include <stack>
+#include <vector>
 
 class ofApp : public ofBaseApp {
 
@@ -11,10 +13,13 @@ class ofApp : public ofBaseApp {
 		void update();
 		void draw();
 
-		ofPath all_lines_;
-		std::stack<ofPolyline> canvas_lines_;
-		std::stack<ofPolyline> undo_lines_;
-		ofPolyline* current_line_;
+		//ofPath all_lines_;
+		std::vector<AppLine> canvas_lines_;	// USE STACK TO HOLD SEPARATE LINES
+												// Note: when change is done, all_lines_ should not
+												// be used anywhere
+												// Note 2: canvas changed to vectors to loop through
+		std::stack<AppLine> undo_lines_;
+		AppLine* current_line_;
 
 		// Click once to put down pen, drag, click again to release
 		bool drawing = false;
@@ -22,6 +27,8 @@ class ofApp : public ofBaseApp {
 		void mousePressed(int x, int y, int button);
 		void mouseMoved(int x, int y );
 		void mouseExited(int x, int y);
+
+		void drawCanvas();
 
 	    shared_ptr<ToolGui> gui;
 		

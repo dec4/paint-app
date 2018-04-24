@@ -2,36 +2,38 @@
 
 
 void ofApp::setup() {
-	all_lines_.setMode(ofPath::POLYLINES);
-	ofColor black(0,0,0);  // -------------- DELETE LATER
-	all_lines_.setStrokeColor((*gui).getColor());  // -- REPLACE WITH COLOR FROM TOOLGUI 
-	all_lines_.setFilled(false);  // ------- KEEP
-	all_lines_.setStrokeWidth((*gui).getRadius());  // ------ REPLACE WITH RADIUS FROM TOOLGUI
-	all_lines_.setCurveResolution(500); //-- replace later??
-	all_lines_.newSubPath();
+	//current_line_ = new AppLine();
 }
 
-void ofApp::update() {
-	// updates based on toolgui
-	all_lines_.setStrokeColor( (*gui).getColor() );
-	all_lines_.setStrokeWidth( ((*gui).getRadius())*2 );
+void ofApp::update() {	
+
 }
 
 void ofApp::draw() {
-	all_lines_.draw();
+	drawCanvas();
+	// Draw current line since it is not added to canvas_lines_ yet
+	if (drawing) {
+		ofSetColor(current_line_->getColor());
+		ofSetLineWidth(current_line_->getWidth());
+		(current_line_->getLine()).draw();
+	}
 }
 
 void ofApp::mousePressed(int x, int y, int button) {
+	// when mouse is pressed, record color and radius
 	ofPoint pt;
 	pt.set(x,y);
 
 	if (!drawing) {
 		drawing = true;
-		all_lines_.lineTo(pt);
+		ofColor color = (*gui).getColor();
+		int radius = (*gui).getRadius();
+		current_line_ = new AppLine(pt, color, radius);
 	} else {
+		current_line_->add_point(pt);
+		canvas_lines_.push_back(*current_line_); 
+		current_line_ = nullptr;
 		drawing = false;
-		all_lines_.lineTo(pt);
-		all_lines_.newSubPath();
 	}
 }
 
@@ -41,7 +43,7 @@ void ofApp::mouseMoved(int x, int y ) {
 	} else {
 		ofPoint pt;
 		pt.set(x,y);
-		all_lines_.lineTo(pt);
+		current_line_->add_point(pt);
 	}
 }
 
@@ -49,11 +51,19 @@ void ofApp::mouseExited(int x, int y) {
 	if (!drawing) {
 		return;
 	} else {
-		drawing = false;
 		ofPoint pt;
 		pt.set(x,y);
-		all_lines_.lineTo(pt);
-		all_lines_.newSubPath();
+		current_line_->add_point(pt);
+		canvas_lines_.push_back(*current_line_); 
+		drawing = false;
+	}
+}
+
+void ofApp::drawCanvas() {
+	for (auto line : canvas_lines_) {
+		ofSetColor(line.getColor());
+		ofSetLineWidth(line.getWidth());
+		(line.getLine()).draw();
 	}
 }
 

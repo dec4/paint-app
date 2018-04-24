@@ -12,10 +12,15 @@ Project{
         name: { return FileInfo.baseName(path) }
 
         files: [
+            'src/appcolor.h',
+            'src/appline.cpp',
+            'src/appline.h',
             'src/hsbColor.h',
             'src/main.cpp',
             'src/ofApp.cpp',
             'src/ofApp.h',
+            'src/toolgui.cpp',
+            'src/toolgui.h',
             'src/tools.cpp',
             'src/tools.h',
         ]
