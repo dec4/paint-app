@@ -26,12 +26,13 @@ void ofApp::mousePressed(int x, int y, int button) {
 
 	if (!drawing) {
 		drawing = true;
-		ofColor color = (*gui).getColor();
-		int radius = (*gui).getRadius();
+		redo_allowed_ = false;
+		ofColor color = (*tools).getColor();
+		int radius = (*tools).getRadius();
 		current_line_ = new AppLine(pt, color, radius);
 	} else {
 		current_line_->add_point(pt);
-		canvas_lines_.push_back(*current_line_); 
+		canvas_lines_.push_back(current_line_); 
 		current_line_ = nullptr;
 		drawing = false;
 	}
@@ -54,16 +55,38 @@ void ofApp::mouseExited(int x, int y) {
 		ofPoint pt;
 		pt.set(x,y);
 		current_line_->add_point(pt);
-		canvas_lines_.push_back(*current_line_); 
+		canvas_lines_.push_back(current_line_); 
 		drawing = false;
 	}
 }
 
 void ofApp::drawCanvas() {
 	for (auto line : canvas_lines_) {
-		ofSetColor(line.getColor());
-		ofSetLineWidth(line.getWidth());
-		(line.getLine()).draw();
+		ofSetColor(line->getColor());
+		ofSetLineWidth(line->getWidth());
+		(line->getLine()).draw();
+	}
+}
+
+void ofApp::clearCanvas() {
+
+}
+
+void ofApp::undo() {
+	if (canvas_lines_.empty()) {
+		return;
+	}
+	auto temp = canvas_lines_.back();
+	canvas_lines_.pop_back();
+	undo_lines_.push(temp);
+	redo_allowed_ = true;
+}
+
+void ofApp::redo() {
+	if (redo_allowed_ && !(undo_lines_.empty())) {
+		auto temp = undo_lines_.top();
+		undo_lines_.pop();
+		canvas_lines_.push_back(temp);
 	}
 }
 

@@ -27,9 +27,28 @@ void ToolGui::setup() {
     //gui.setup(parameters);
     // NOTE: USE PARAMETERS IF CREATE OWN HSBACOLOR OBJECT
     // ^SAME FOR DRAWING TOOL?
+    // Also note using ofParameter will allow changes in range (https://forum.openframeworks.cc/t/dynamic-range-in-ofxslider-ofxgui/15424)
 
     gui_.setup();   
-    gui_.add(radius_.setup("radius", .5, 2, 5));
+
+    // set resolution
+    //ofSetCircleResolution(100);
+
+    // add set line roundness?
+
+    // Add listener (below) to all tools then add method so that if tool changes, 
+    // all other tools are disabled.
+    gui_.add(pencil_.setup("pencil", true));
+    gui_.add(pen_.setup("pen", false));
+    gui_.add(eraser_.setup("eraser", false));
+    // Add listeners to makeshift radio buttons
+    pencil_.addListener(this, &ToolGui::choosePencil);
+    pen_.addListener(this, &ToolGui::choosePen);
+    eraser_.addListener(this, &ToolGui::chooseEraser);
+
+    // Add radius slider
+    gui_.add(radius_.setup("radius", 2, .5, 5));
+    // Add color sliders
     gui_.add(hue_.setup("hue", 125, 0, 255));
     gui_.add(saturation_.setup("saturation", 255, 0, 255));
     gui_.add(brightness_.setup("brightness", 255, 0, 255));
@@ -39,16 +58,14 @@ void ToolGui::setup() {
     // different ranges for color, alpha, size, etc.)
     // ^ or connect gui w tool object
 
-    // Add listener (below) to all tools then add method so that if tool changes, 
-    // all other tools are disabled.
-    gui_.add(pencil_.setup("pencil", true));
-    gui_.add(pen_.setup("pen", false));
-    gui_.add(eraser_.setup("eraser", false));
+    gui_.add(clear_.setup("clear canvas"));
+    clear_.addListener(this, &ToolGui::clearPressed);
 
-    // Add listeners
-    pencil_.addListener(this, &ToolGui::choosePencil);
-    pen_.addListener(this, &ToolGui::choosePen);
-    eraser_.addListener(this, &ToolGui::chooseEraser);
+    gui_.add(undo_.setup("undo"));
+    undo_.addListener(this, &ToolGui::undoPressed);
+
+    gui_.add(redo_.setup("redo"));
+    redo_.addListener(this, &ToolGui::redoPressed);
 
     ofBackground(background_);
 
@@ -126,4 +143,16 @@ void ToolGui::chooseEraser(bool& pressed) {
         current_tool_ = ERASER;
         eraser_ = true;
     }
+}
+
+void ToolGui::clearPressed() {
+    (*canvas).clearCanvas();
+}
+
+void ToolGui::undoPressed() {
+    (*canvas).undo();
+}
+
+void ToolGui::redoPressed() {
+    (*canvas).redo();
 }

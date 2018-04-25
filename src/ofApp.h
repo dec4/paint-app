@@ -6,6 +6,8 @@
 #include <stack>
 #include <vector>
 
+class ToolGui;
+
 class ofApp : public ofBaseApp {
 
 	public:
@@ -14,11 +16,11 @@ class ofApp : public ofBaseApp {
 		void draw();
 
 		//ofPath all_lines_;
-		std::vector<AppLine> canvas_lines_;	// USE STACK TO HOLD SEPARATE LINES
+		std::vector<AppLine*> canvas_lines_;	// USE STACK TO HOLD SEPARATE LINES
 												// Note: when change is done, all_lines_ should not
 												// be used anywhere
 												// Note 2: canvas changed to vectors to loop through
-		std::stack<AppLine> undo_lines_;
+		std::stack<AppLine*> undo_lines_;
 		AppLine* current_line_;
 
 		// Click once to put down pen, drag, click again to release
@@ -29,8 +31,13 @@ class ofApp : public ofBaseApp {
 		void mouseExited(int x, int y);
 
 		void drawCanvas();
+		void clearCanvas();
+		void undo();
+		void redo();
 
-	    shared_ptr<ToolGui> gui;
+	    shared_ptr<ToolGui> tools;
+
+		bool redo_allowed_ = false;
 		
 };
 

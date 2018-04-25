@@ -14,7 +14,7 @@ public:
     }
     //explicit AppLine(ofPolyline& line, ofColor color, int radius) :
     //         line_(line), color_(color), radius_(radius) {};
-    explicit AppLine(ofPoint& start_point, ofColor& color, int& radius) {
+    explicit AppLine(ofPoint& start_point, ofColor& color, float radius) {
         color_ = color;
         radius_ = radius;
         line_ = new ofPolyline();
@@ -24,15 +24,15 @@ public:
     // GETTERS // TODO: NAMING STYLE
     ofPolyline getLine();
     ofColor getColor();
-    int getWidth();
+    float getWidth();
     //DrawingTool getTool();  Tool should only determine possible settings (color, size)
 
     // OTHER
-    void add_point(ofPoint pt);
+    void add_point(ofPoint& pt);
 
 private:
     ofPolyline* line_;
     ofColor color_;
-    int radius_;
+    float radius_;
     //DrawingTool tool_;  (see getter)
 };

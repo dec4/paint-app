@@ -2,6 +2,9 @@
 
 #include "ofMain.h"
 #include "ofxGui.h"
+#include "ofApp.h"
+
+class ofApp;
 
 enum DrawingTool {  // TODO: SHOULD BE INSIDE A CLASS
 	PENCIL,
@@ -20,21 +23,25 @@ class ToolGui : public ofBaseApp {
 		DrawingTool getTool();
 		int getRadius();
 
+		shared_ptr<ofApp> canvas;
+
 	private:
 
 		// Using sliders for now instead of parameter in order to implement hsba
 		//ofParameterGroup parameters;
 	    //ofParameter<float> radius;
 	    //ofParameter<ofColor> color;
+		ofxToggle pen_;
+		ofxToggle pencil_;
+		ofxToggle eraser_;
 		ofxFloatSlider radius_;
 		ofxIntSlider hue_;
 		ofxIntSlider saturation_;
 		ofxIntSlider brightness_;
 		ofxIntSlider alpha_;
-		ofxToggle pen_;
-		ofxToggle pencil_;
-		ofxToggle eraser_;
-
+		ofxButton clear_;
+		ofxButton undo_;
+		ofxButton redo_;
         
 	    ofxPanel gui_;
 
@@ -48,5 +55,9 @@ class ToolGui : public ofBaseApp {
 		void disableCurrent();
 
 		DrawingTool current_tool_ = PENCIL;
+
+		void clearPressed();
+		void undoPressed();
+		void redoPressed();
 };
 

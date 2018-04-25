@@ -30,12 +30,13 @@ int main( ) {
 	settings.resizable = false;
 	shared_ptr<ofAppBaseWindow> tool_window = ofCreateWindow(settings);
 
-	shared_ptr<ofApp> canvas(new ofApp);
+	shared_ptr<ofApp> canvas_gui(new ofApp);
 	shared_ptr<ToolGui> tool_gui(new ToolGui);
-	canvas->gui = tool_gui;
+	canvas_gui->tools = tool_gui;
+	tool_gui->canvas = canvas_gui;
 
 	ofRunApp(tool_window, tool_gui);
-	ofRunApp(main_window, canvas);
+	ofRunApp(main_window, canvas_gui);
 	ofRunMainLoop();
 
 }
