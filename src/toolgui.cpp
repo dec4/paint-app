@@ -36,20 +36,18 @@ void ToolGui::setup() {
 
     // add set line roundness?
 
-    // Add listener (below) to all tools then add method so that if tool changes, 
-    // all other tools are disabled.
-    gui_.add(pencil_.setup("pencil", true));
-    gui_.add(pen_.setup("pen", false));
-    gui_.add(eraser_.setup("eraser", false));
-    // Add listeners to makeshift radio buttons
+    // Add listeners to simulate radio buttons
     pencil_.addListener(this, &ToolGui::choosePencil);
     pen_.addListener(this, &ToolGui::choosePen);
     eraser_.addListener(this, &ToolGui::chooseEraser);
+    gui_.add(pencil_.setup("pencil", false));
+    gui_.add(pen_.setup("pen", true));
+    gui_.add(eraser_.setup("eraser", false));
 
     // Add radius slider
     gui_.add(radius_.setup("radius", 2, .5, 5));
     // Add color sliders
-    gui_.add(hue_.setup("hue", 125, 0, 255));
+    gui_.add(hue_.setup("hue", 150, 0, 255));
     gui_.add(saturation_.setup("saturation", 255, 0, 255));
     gui_.add(brightness_.setup("brightness", 255, 0, 255));
     gui_.add(alpha_.setup("alpha", 255, 0, 255));
@@ -67,12 +65,10 @@ void ToolGui::setup() {
     gui_.add(redo_.setup("redo"));
     redo_.addListener(this, &ToolGui::redoPressed);
 
-    ofBackground(background_);
-
 }
 
 void ToolGui::update() {
-    // update color
+    // update color based off of sliders
     color_.setHsb(hue_, saturation_, brightness_, alpha_);
 }
 
@@ -85,17 +81,65 @@ void ToolGui::draw() {
 
 //*** PRIVATE METHODS ***//
 
+void ToolGui::updateGui() {
+    switch (current_tool_) {
+        case PENCIL: 
+            hue_ = 0;
+            hue_.setMax(0);
+            saturation_ = 0;
+            saturation_.setMax(0);
+            brightness_ = 0;
+            brightness_.setMax(255);
+            alpha_ = 255;
+            alpha_.setMax(255);
+            break;
+        case PEN:
+            hue_ = 150;
+            hue_.setMax(255);
+            saturation_ = 255;
+            saturation_.setMax(255);
+            brightness_ = 255;
+            brightness_.setMax(255);
+            alpha_ = 255;
+            alpha_.setMax(255);
+            break;
+        case ERASER:
+            hue_ = canvas->background_.getHue();
+            hue_.setMin(canvas->background_.getHue());
+            hue_.setMax(canvas->background_.getHue());
+            saturation_ = canvas->background_.getSaturation();
+            saturation_.setMin(canvas->background_.getSaturation());
+            saturation_.setMax(canvas->background_.getSaturation());
+            brightness_ = canvas->background_.getBrightness();
+            brightness_.setMin(canvas->background_.getBrightness());
+            brightness_.setMax(canvas->background_.getBrightness());
+            alpha_ = 255;
+            alpha_.setMax(255);
+            break;
+    }
+}
+
+
 // NOTE FOR CASES: CREATE VECTOR OF TOGGLES TO LOOP THRU 
 // ALL INSTEAD OF HARD CODING?
 void ToolGui::disableCurrent() {
     switch (current_tool_) {
         case PENCIL: 
             pencil_ = false;
+            break;
         case PEN:
             pen_ = false;
+            break;
         case ERASER:
             eraser_ = false;
+            break;
     }
+}
+
+void ToolGui::disableAll() {
+    pencil_ = false;
+    pen_ = false;
+    eraser_ = false;
 }
 
 
@@ -105,44 +149,61 @@ void ToolGui::choosePencil(bool& pressed) {
     if (!pressed) {
         return;
     }
-    // Some tool must always be active, so don't deactivate current tool
-    // CURRENTLY **NOT** WORKING FOR ALL THREE TOOLS
-    if (current_tool_ == PENCIL) {
-        //disableCurrent();
-        pencil_ = true;
-    } else {
+    disableAll();
+    pencil_ = true;
+    current_tool_ = PENCIL;
+    updateGui();
+    /*
+    if (pressed && current_tool_ != PENCIL) {
         disableCurrent();
         current_tool_ = PENCIL;
+        //pencil_ = true;
+        updateGui();
+    } else if (!pressed && current_tool_ == PENCIL) {
+        //disableCurrent();
         pencil_ = true;
-    }
+    } */
 }
 
 void ToolGui::choosePen(bool& pressed) {
     if (!pressed) {
         return;
     }
-    // Some tool must always be active, so don't deactivate current tool
-    if (current_tool_ == PEN) {
-        pen_ = true;
-    } else {
+    disableAll();
+    pen_ = true;
+    current_tool_ = PEN;
+    updateGui();
+    /*
+    if (pressed && current_tool_ != PEN) {
         disableCurrent();
         current_tool_ = PEN;
+        //pen_ = true;
+        updateGui();
+    } else if (!pressed && current_tool_ == PEN) {
+        //disableCurrent();
         pen_ = true;
-    }
+    } */
 }
 
 void ToolGui::chooseEraser(bool& pressed) {
     if (!pressed) {
         return;
     }
+    disableAll();
+    eraser_ = true;
+    current_tool_ = ERASER;
+    updateGui();
+    /*
     // Some tool must always be active, so don't deactivate current tool
-    if (current_tool_ == ERASER) {
-        eraser_ = true;
-    } else {
+    if (current_tool_ != ERASER && pressed) {
         disableCurrent();
         current_tool_ = ERASER;
         eraser_ = true;
-    }
+        updateGui();
+    } else if (current_tool_ == ERASER) {
+        //disableCurrent();
+        eraser_= true;
+    }*/
 }
 
 void ToolGui::clearPressed() {

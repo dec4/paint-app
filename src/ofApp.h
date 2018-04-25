@@ -38,7 +38,9 @@ class ofApp : public ofBaseApp {
 	    shared_ptr<ToolGui> tools;
 
 		bool redo_allowed_ = false;
-		
+
+		ofColor background_ = ofColor(255, 255, 255);
+
 };
 
 

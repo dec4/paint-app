@@ -43,21 +43,25 @@ class ToolGui : public ofBaseApp {
 		ofxButton undo_;
 		ofxButton redo_;
         
-	    ofxPanel gui_;
-
 		ofColor color_;	// updated by sliders above (hsba)
-		ofColor background_ = ofColor(255, 255, 255);
 
+		ofxPanel gui_;
+	    //ofxPanel pen_gui_;
+		//ofxPanel pencil_gui_;
+		//ofxPanel eraser_gui_;
 
 		void choosePencil(bool& pressed);
 		void choosePen(bool& pressed);
 		void chooseEraser(bool& pressed);
 		void disableCurrent();
+		void disableAll();
 
-		DrawingTool current_tool_ = PENCIL;
+		DrawingTool current_tool_ = PEN;
 
 		void clearPressed();
 		void undoPressed();
 		void redoPressed();
+
+		void updateGui();
 };
 
