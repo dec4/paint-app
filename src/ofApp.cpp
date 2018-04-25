@@ -69,7 +69,17 @@ void ofApp::drawCanvas() {
 }
 
 void ofApp::clearCanvas() {
-
+	// NOTE due to limitations of objects and design, this will NOT be able to be undone
+	// clear canvas
+	while (!canvas_lines_.empty()) {
+		delete canvas_lines_.back();	// TODO: CREATE DESTRUCTOR FOR APPLINE
+		canvas_lines_.pop_back();
+	}
+	// clear undo lines
+	while (!undo_lines_.empty()) {
+		delete undo_lines_.top();
+		undo_lines_.pop();
+	}
 }
 
 void ofApp::undo() {

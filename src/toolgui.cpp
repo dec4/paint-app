@@ -79,7 +79,7 @@ void ToolGui::update() {
 void ToolGui::draw() {
     ofSetColor(color_);
     ofDrawCircle(0.7*ofGetWidth(), ofGetHeight()/2, radius_);
-	gui_.draw();
+	gui_.draw();    // NOTENOTENOTE: USE ENUM TO DETERMINE WHICH GUI TO DRAW
 }
 
 
