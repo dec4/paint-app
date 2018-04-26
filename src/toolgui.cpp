@@ -1,5 +1,6 @@
 #include "toolgui.h"
 #include <string>
+#include <iostream>  // for debugging
 
 //*** GETTERS ***//
 
@@ -11,7 +12,7 @@ DrawingTool ToolGui::GetTool() {
     return current_tool_;
 }
 
-int ToolGui::GetRadius() {
+float ToolGui::GetRadius() {
     return radius_;
 }
 
@@ -52,10 +53,6 @@ void ToolGui::setup() {
     gui_.add(brightness_.setup("brightness", 255, 0, 255));
     gui_.add(alpha_.setup("alpha", 255, 0, 255));
 
-    // NOTE: create method to reset gui (so that different tools have 
-    // different ranges for color, alpha, size, etc.)
-    // ^ or connect gui w tool object
-
     gui_.add(clear_.setup("clear canvas"));
     clear_.addListener(this, &ToolGui::ClearPressed);
 
@@ -69,8 +66,10 @@ void ToolGui::setup() {
     //save_.addListener(this,  &ToolGui::savePressed);
 }
 
-void ToolGui::update() {
-    // update color based off of sliders
+void ToolGui::update() { 
+    // Update color based off of sliders
+    // Note: using update instead of listeners because then it's one line
+    // vs setting color in four different listeners
     color_.setHsb(hue_, saturation_, brightness_, alpha_);
 }
 
@@ -122,8 +121,6 @@ void ToolGui::UpdateGui() {
 }
 
 
-// NOTE FOR CASES: CREATE VECTOR OF TOGGLES TO LOOP THRU 
-// ALL INSTEAD OF HARD CODING?
 void ToolGui::DisableCurrent() {
     switch (current_tool_) {
         case PENCIL: 
@@ -147,18 +144,19 @@ void ToolGui::DisableAll() {
 
 // Functions to help simulate radio buttons
 
-void ToolGui::ChoosePencil(bool& pressed) {
-    if (!pressed && current_tool_ != PENCIL) {
-        return;
+void ToolGui::ChoosePencil(bool& changed) {
+    if (changed && pencil_ == true) {
+        DisableCurrent();
+        pencil_ = true;
+        current_tool_ = PENCIL;
+        UpdateGui();
+    } else if (changed && pencil_ == false) {
+        pencil_ = true;
     }
-    DisableAll();
-    pencil_ = true;
-    current_tool_ = PENCIL;
-    UpdateGui();
 }
 
-void ToolGui::ChoosePen(bool& pressed) {
-    if (!pressed) {
+void ToolGui::ChoosePen(bool& changed) {
+    if (!changed) {
         return;
     }
     DisableAll();
@@ -167,8 +165,8 @@ void ToolGui::ChoosePen(bool& pressed) {
     UpdateGui();
 }
 
-void ToolGui::ChooseEraser(bool& pressed) {
-    if (!pressed) {
+void ToolGui::ChooseEraser(bool& changed) {
+    if (!changed) {
         return;
     }
     DisableAll();
@@ -179,6 +177,7 @@ void ToolGui::ChooseEraser(bool& pressed) {
 
 void ToolGui::ClearPressed() {
     (*canvas).ClearCanvas();
+    (*canvas).ClearUndoHistory();
 }
 
 void ToolGui::UndoPressed() {

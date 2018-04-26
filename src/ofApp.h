@@ -24,7 +24,7 @@ class ofApp : public ofBaseApp {
 
 		// Line storage variaables
 		std::vector<AppLine*> canvas_lines_; 
-		std::stack<AppLine*> undo_lines_;
+		std::stack<AppLine*> redo_lines_;
 		AppLine* current_line_;
 
 		bool drawing = false;
@@ -37,6 +37,7 @@ class ofApp : public ofBaseApp {
 
 		// Tool functions
 		void ClearCanvas();
+		void ClearUndoHistory();
 		void Undo();
 		void Redo();
 		bool redo_allowed_ = false;  // Can't redo something that was overwritten

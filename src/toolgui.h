@@ -24,7 +24,7 @@ class ToolGui : public ofBaseApp {
 		// Getters for access in ofApp
 		ofColor GetColor();
 		DrawingTool GetTool();
-		int GetRadius();
+		float GetRadius();
 
 		shared_ptr<ofApp> canvas;
 

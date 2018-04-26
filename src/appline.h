@@ -12,7 +12,7 @@ public:
     AppLine() {
         line_ = new ofPolyline();
     }
-    explicit AppLine(ofPoint& start_point, ofColor& color, float radius) {
+    explicit AppLine(ofPoint& start_point, ofColor& color, float& radius) {
         color_ = color;
         radius_ = radius;
         line_ = new ofPolyline();

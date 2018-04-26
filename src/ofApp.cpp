@@ -1,4 +1,5 @@
 #include "ofApp.h"
+#include <iostream>  // for debugging
 
 
 void ofApp::setup() {
@@ -23,11 +24,13 @@ void ofApp::mousePressed(int x, int y, int button) {
 	pt.set(x,y);
 
 	if (!drawing) {  // Create new line
+		std::cout << "new line" << std::endl; // for debugging
 		drawing = true;
 		redo_allowed_ = false;
 		ofColor color = (*tools).GetColor();
-		int radius = (*tools).GetRadius();
+		float radius = (*tools).GetRadius();
 		current_line_ = new AppLine(pt, color, radius);
+		ClearUndoHistory();
 	} else {  // Add to current line
 		current_line_->AddPoint(pt);
 		canvas_lines_.push_back(current_line_); 
@@ -64,15 +67,16 @@ void ofApp::DrawCanvas() {
 
 void ofApp::ClearCanvas() {
 	// NOTE due to limitations of objects and design, this will NOT be able to be undone
-	// clear canvas
 	while (!canvas_lines_.empty()) {
 		delete canvas_lines_.back();
 		canvas_lines_.pop_back();
 	}
-	// clear undo lines
-	while (!undo_lines_.empty()) {
-		delete undo_lines_.top();
-		undo_lines_.pop();
+}
+
+void ofApp::ClearUndoHistory() {
+	while (!redo_lines_.empty()) {
+		delete redo_lines_.top();
+		redo_lines_.pop();
 	}
 }
 
@@ -82,14 +86,14 @@ void ofApp::Undo() {
 	}
 	auto temp = canvas_lines_.back();
 	canvas_lines_.pop_back();
-	undo_lines_.push(temp);
+	redo_lines_.push(temp);
 	redo_allowed_ = true;
 }
 
 void ofApp::Redo() {
-	if (redo_allowed_ && !(undo_lines_.empty())) {
-		auto temp = undo_lines_.top();
-		undo_lines_.pop();
+	if (redo_allowed_ && !(redo_lines_.empty())) {
+		auto temp = redo_lines_.top();
+		redo_lines_.pop();
 		canvas_lines_.push_back(temp);
 	}
 }
