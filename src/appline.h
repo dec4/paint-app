@@ -12,8 +12,6 @@ public:
     AppLine() {
         line_ = new ofPolyline();
     }
-    //explicit AppLine(ofPolyline& line, ofColor color, int radius) :
-    //         line_(line), color_(color), radius_(radius) {};
     explicit AppLine(ofPoint& start_point, ofColor& color, float radius) {
         color_ = color;
         radius_ = radius;
@@ -21,18 +19,16 @@ public:
         line_->addVertex(start_point);
     };
 
-    // GETTERS // TODO: NAMING STYLE
-    ofPolyline getLine();
-    ofColor getColor();
-    float getWidth();
-    //DrawingTool getTool();  Tool should only determine possible settings (color, size)
+    // GETTERS
+    ofPolyline GetLine();
+    ofColor GetColor();
+    float GetWidth();
 
-    // OTHER
-    void add_point(ofPoint& pt);
+    // MODIFIERS
+    void AddPoint(ofPoint& pt);
 
 private:
     ofPolyline* line_;
     ofColor color_;
     float radius_;
-    //DrawingTool tool_;  (see getter)
 };

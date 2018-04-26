@@ -15,56 +15,56 @@ enum DrawingTool {  // TODO: SHOULD BE INSIDE A CLASS
 class ToolGui : public ofBaseApp {
 
 	public:
+
+		// Main OpenFrameworks loop
 		void setup();
 		void update();
 		void draw();
 
-		ofColor getColor();
-		DrawingTool getTool();
-		int getRadius();
+		// Getters for access in ofApp
+		ofColor GetColor();
+		DrawingTool GetTool();
+		int GetRadius();
 
 		shared_ptr<ofApp> canvas;
 
 	private:
 
-		// Using sliders for now instead of parameter in order to implement hsba
-		//ofParameterGroup parameters;
-	    //ofParameter<float> radius;
-	    //ofParameter<ofColor> color;
+		ofxPanel gui_;
+		// Drawing tool toggles
 		ofxToggle pen_;
 		ofxToggle pencil_;
 		ofxToggle eraser_;
+		// Color sliders
 		ofxFloatSlider radius_;
 		ofxIntSlider hue_;
 		ofxIntSlider saturation_;
 		ofxIntSlider brightness_;
 		ofxIntSlider alpha_;
+		// Buttons for other functions
 		ofxButton clear_;
 		ofxButton undo_;
 		ofxButton redo_;
         ofxButton save_;
 
-		ofColor color_;	// updated by sliders above (hsba)
-
-		ofxPanel gui_;
-	    //ofxPanel pen_gui_;
-		//ofxPanel pencil_gui_;
-		//ofxPanel eraser_gui_;
-
-		void choosePencil(bool& pressed);
-		void choosePen(bool& pressed);
-		void chooseEraser(bool& pressed);
-		void disableCurrent();
-		void disableAll();
-
+		ofColor color_;	// current color (hsba) - updated in update()
 		DrawingTool current_tool_ = PEN;
 
-		void clearPressed();
-		void undoPressed();
-		void redoPressed();
+		// Tool toggle listeners
+		void ChoosePencil(bool& pressed);
+		void ChoosePen(bool& pressed);
+		void ChooseEraser(bool& pressed);
+		// Helper functions for simulating radio buttons
+		void DisableCurrent();
+		void DisableAll();
+
+		// Button listeners
+		void ClearPressed();
+		void UndoPressed();
+		void RedoPressed();
 
 		//void savePressed();
 
-		void updateGui();
+		void UpdateGui();  // Changes parameters depending on selected tool
 };
 

@@ -2,7 +2,7 @@
 
 
 void ofApp::setup() {
-	ofBackground(background_);
+	ofBackground(background_);  // Set background color
 }
 
 void ofApp::update() {	
@@ -10,28 +10,26 @@ void ofApp::update() {
 }
 
 void ofApp::draw() {
-	drawCanvas();
-	// Draw current line since it is not added to canvas_lines_ yet
-	if (drawing) {
-		ofSetColor(current_line_->getColor());
-		ofSetLineWidth(current_line_->getWidth());
-		(current_line_->getLine()).draw();
+	DrawCanvas();
+	if (drawing) {  // Draw current line since it hasn't been added to canvas_lines_ yet
+		ofSetColor(current_line_->GetColor());
+		ofSetLineWidth(current_line_->GetWidth());
+		(current_line_->GetLine()).draw();
 	}
 }
 
 void ofApp::mousePressed(int x, int y, int button) {
-	// when mouse is pressed, record color and radius
 	ofPoint pt;
 	pt.set(x,y);
 
-	if (!drawing) {
+	if (!drawing) {  // Create new line
 		drawing = true;
 		redo_allowed_ = false;
-		ofColor color = (*tools).getColor();
-		int radius = (*tools).getRadius();
+		ofColor color = (*tools).GetColor();
+		int radius = (*tools).GetRadius();
 		current_line_ = new AppLine(pt, color, radius);
-	} else {
-		current_line_->add_point(pt);
+	} else {  // Add to current line
+		current_line_->AddPoint(pt);
 		canvas_lines_.push_back(current_line_); 
 		current_line_ = nullptr;
 		drawing = false;
@@ -39,40 +37,36 @@ void ofApp::mousePressed(int x, int y, int button) {
 }
 
 void ofApp::mouseMoved(int x, int y ) {	
-	if (!drawing) {
-		return;
-	} else {
+	if (drawing) {
 		ofPoint pt;
 		pt.set(x,y);
-		current_line_->add_point(pt);
+		current_line_->AddPoint(pt);
 	}
 }
 
 void ofApp::mouseExited(int x, int y) {
-	if (!drawing) {
-		return;
-	} else {
+	if (drawing) {
 		ofPoint pt;
 		pt.set(x,y);
-		current_line_->add_point(pt);
+		current_line_->AddPoint(pt);
 		canvas_lines_.push_back(current_line_); 
 		drawing = false;
 	}
 }
 
-void ofApp::drawCanvas() {
+void ofApp::DrawCanvas() {
 	for (auto line : canvas_lines_) {
-		ofSetColor(line->getColor());
-		ofSetLineWidth(line->getWidth());
-		(line->getLine()).draw();
+		ofSetColor(line->GetColor());
+		ofSetLineWidth(line->GetWidth());
+		(line->GetLine()).draw();
 	}
 }
 
-void ofApp::clearCanvas() {
+void ofApp::ClearCanvas() {
 	// NOTE due to limitations of objects and design, this will NOT be able to be undone
 	// clear canvas
 	while (!canvas_lines_.empty()) {
-		delete canvas_lines_.back();	// TODO: CREATE DESTRUCTOR FOR APPLINE?
+		delete canvas_lines_.back();
 		canvas_lines_.pop_back();
 	}
 	// clear undo lines
@@ -82,7 +76,7 @@ void ofApp::clearCanvas() {
 	}
 }
 
-void ofApp::undo() {
+void ofApp::Undo() {
 	if (canvas_lines_.empty()) {
 		return;
 	}
@@ -92,7 +86,7 @@ void ofApp::undo() {
 	redo_allowed_ = true;
 }
 
-void ofApp::redo() {
+void ofApp::Redo() {
 	if (redo_allowed_ && !(undo_lines_.empty())) {
 		auto temp = undo_lines_.top();
 		undo_lines_.pop();
@@ -100,15 +94,7 @@ void ofApp::redo() {
 	}
 }
 
-/*
-void ofApp::saveImage(std::string& filename) {
-	//makeCurrent();
-	img.grabScreen(0, 0 , ofGetWidth(), ofGetHeight());
-    img.save(filename);
-}
-*/
-
-void ofApp::keyPressed(int key) {
+void ofApp::keyPressed(int key) {  // TODO: add other keyboard shortcuts
 	int upper_key = toupper(key);
 
 	if (upper_key == 'S') {
@@ -117,78 +103,3 @@ void ofApp::keyPressed(int key) {
     	img.save(default_filename);
 	}
 }
-
-
-/* STARTER CODE
-
-//--------------------------------------------------------------
-void ToolGui::setup(){
-
-}
-
-//--------------------------------------------------------------
-void ToolGui::update(){
-
-}
-
-//--------------------------------------------------------------
-void ToolGui::draw(){
-
-}
-
-//--------------------------------------------------------------
-void ToolGui::keyPressed(int key){
-
-}
-
-//--------------------------------------------------------------
-void ToolGui::keyReleased(int key){
-
-}
-
-//--------------------------------------------------------------
-void ToolGui::mouseMoved(int x, int y ){
-
-}
-
-//--------------------------------------------------------------
-void ToolGui::mouseDragged(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ToolGui::mousePressed(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ToolGui::mouseReleased(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ToolGui::mouseEntered(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ToolGui::mouseExited(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ToolGui::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
-void ToolGui::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void ToolGui::dragEvent(ofDragInfo dragInfo){ 
-
-}
-
-*/

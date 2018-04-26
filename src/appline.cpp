@@ -1,17 +1,17 @@
 #include "appline.h"
 
-ofPolyline AppLine::getLine() {
+ofPolyline AppLine::GetLine() {
     return *line_;
 }
 
-ofColor AppLine::getColor() {
+ofColor AppLine::GetColor() {
     return color_;
 }
 
-float AppLine::getWidth() {
+float AppLine::GetWidth() {
     return radius_*2;
 }
 
-void AppLine::add_point(ofPoint& pt) {
+void AppLine::AddPoint(ofPoint& pt) {
     line_->addVertex(pt);
 }

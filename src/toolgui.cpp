@@ -3,15 +3,15 @@
 
 //*** GETTERS ***//
 
-ofColor ToolGui::getColor() {
+ofColor ToolGui::GetColor() {
     return color_;
 }
 
-DrawingTool ToolGui::getTool() {
+DrawingTool ToolGui::GetTool() {
     return current_tool_;
 }
 
-int ToolGui::getRadius() {
+int ToolGui::GetRadius() {
     return radius_;
 }
 
@@ -37,9 +37,9 @@ void ToolGui::setup() {
     // add set line roundness?
 
     // Add listeners to simulate radio buttons
-    pencil_.addListener(this, &ToolGui::choosePencil);
-    pen_.addListener(this, &ToolGui::choosePen);
-    eraser_.addListener(this, &ToolGui::chooseEraser);
+    pencil_.addListener(this, &ToolGui::ChoosePencil);
+    pen_.addListener(this, &ToolGui::ChoosePen);
+    eraser_.addListener(this, &ToolGui::ChooseEraser);
     gui_.add(pencil_.setup("pencil", false));
     gui_.add(pen_.setup("pen", true));
     gui_.add(eraser_.setup("eraser", false));
@@ -57,13 +57,13 @@ void ToolGui::setup() {
     // ^ or connect gui w tool object
 
     gui_.add(clear_.setup("clear canvas"));
-    clear_.addListener(this, &ToolGui::clearPressed);
+    clear_.addListener(this, &ToolGui::ClearPressed);
 
     gui_.add(undo_.setup("undo"));
-    undo_.addListener(this, &ToolGui::undoPressed);
+    undo_.addListener(this, &ToolGui::UndoPressed);
 
     gui_.add(redo_.setup("redo"));
-    redo_.addListener(this, &ToolGui::redoPressed);
+    redo_.addListener(this, &ToolGui::RedoPressed);
 
     gui_.add(save_.setup("'S' in cavas to save"));
     //save_.addListener(this,  &ToolGui::savePressed);
@@ -76,14 +76,14 @@ void ToolGui::update() {
 
 void ToolGui::draw() {
     ofSetColor(color_);
-    ofDrawCircle(0.7*ofGetWidth(), ofGetHeight()/2, radius_);
+    ofDrawCircle(ofGetWidth()/2, 0.85*ofGetHeight(), radius_);
 	gui_.draw();    // NOTENOTENOTE: USE ENUM TO DETERMINE WHICH GUI TO DRAW
 }
 
 
 //*** PRIVATE METHODS ***//
 
-void ToolGui::updateGui() {
+void ToolGui::UpdateGui() {
     switch (current_tool_) {
         case PENCIL: 
             hue_ = 0;
@@ -124,7 +124,7 @@ void ToolGui::updateGui() {
 
 // NOTE FOR CASES: CREATE VECTOR OF TOGGLES TO LOOP THRU 
 // ALL INSTEAD OF HARD CODING?
-void ToolGui::disableCurrent() {
+void ToolGui::DisableCurrent() {
     switch (current_tool_) {
         case PENCIL: 
             pencil_ = false;
@@ -138,7 +138,7 @@ void ToolGui::disableCurrent() {
     }
 }
 
-void ToolGui::disableAll() {
+void ToolGui::DisableAll() {
     pencil_ = false;
     pen_ = false;
     eraser_ = false;
@@ -147,54 +147,44 @@ void ToolGui::disableAll() {
 
 // Functions to help simulate radio buttons
 
-void ToolGui::choosePencil(bool& pressed) {
+void ToolGui::ChoosePencil(bool& pressed) {
     if (!pressed && current_tool_ != PENCIL) {
         return;
     }
-    disableAll();
+    DisableAll();
     pencil_ = true;
     current_tool_ = PENCIL;
-    updateGui();
+    UpdateGui();
 }
 
-void ToolGui::choosePen(bool& pressed) {
+void ToolGui::ChoosePen(bool& pressed) {
     if (!pressed) {
         return;
     }
-    disableAll();
+    DisableAll();
     pen_ = true;
     current_tool_ = PEN;
-    updateGui();
+    UpdateGui();
 }
 
-void ToolGui::chooseEraser(bool& pressed) {
+void ToolGui::ChooseEraser(bool& pressed) {
     if (!pressed) {
         return;
     }
-    disableAll();
+    DisableAll();
     eraser_ = true;
     current_tool_ = ERASER;
-    updateGui();
+    UpdateGui();
 }
 
-void ToolGui::clearPressed() {
-    (*canvas).clearCanvas();
+void ToolGui::ClearPressed() {
+    (*canvas).ClearCanvas();
 }
 
-void ToolGui::undoPressed() {
-    (*canvas).undo();
+void ToolGui::UndoPressed() {
+    (*canvas).Undo();
 }
 
-void ToolGui::redoPressed() {
-    (*canvas).redo();
+void ToolGui::RedoPressed() {
+    (*canvas).Redo();
 }
-
-/*
-void ToolGui::savePressed() {
-    ofFileDialogResult result = ofSystemSaveDialog(default_filename, "save");
-    if(result.bSuccess) {
-        string name = result.getName();
-        (*canvas).saveImage(name);
-    }
-}
-*/
