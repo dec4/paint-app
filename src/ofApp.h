@@ -5,6 +5,7 @@
 #include "appline.h"
 #include <stack>
 #include <vector>
+#include <string>
 
 class ToolGui;
 
@@ -40,6 +41,10 @@ class ofApp : public ofBaseApp {
 		bool redo_allowed_ = false;
 
 		ofColor background_ = ofColor(255, 255, 255);
+
+		ofImage img;
+		//void saveImage(std::string& filename);
+		void keyPressed(int key);
 
 };
 

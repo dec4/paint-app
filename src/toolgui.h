@@ -42,7 +42,8 @@ class ToolGui : public ofBaseApp {
 		ofxButton clear_;
 		ofxButton undo_;
 		ofxButton redo_;
-        
+        ofxButton save_;
+
 		ofColor color_;	// updated by sliders above (hsba)
 
 		ofxPanel gui_;
@@ -61,6 +62,8 @@ class ToolGui : public ofBaseApp {
 		void clearPressed();
 		void undoPressed();
 		void redoPressed();
+
+		//void savePressed();
 
 		void updateGui();
 };

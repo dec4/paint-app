@@ -1,5 +1,5 @@
 #include "toolgui.h"
-
+#include <string>
 
 //*** GETTERS ***//
 
@@ -65,6 +65,8 @@ void ToolGui::setup() {
     gui_.add(redo_.setup("redo"));
     redo_.addListener(this, &ToolGui::redoPressed);
 
+    gui_.add(save_.setup("'S' in cavas to save"));
+    //save_.addListener(this,  &ToolGui::savePressed);
 }
 
 void ToolGui::update() {
@@ -146,23 +148,13 @@ void ToolGui::disableAll() {
 // Functions to help simulate radio buttons
 
 void ToolGui::choosePencil(bool& pressed) {
-    if (!pressed) {
+    if (!pressed && current_tool_ != PENCIL) {
         return;
     }
     disableAll();
     pencil_ = true;
     current_tool_ = PENCIL;
     updateGui();
-    /*
-    if (pressed && current_tool_ != PENCIL) {
-        disableCurrent();
-        current_tool_ = PENCIL;
-        //pencil_ = true;
-        updateGui();
-    } else if (!pressed && current_tool_ == PENCIL) {
-        //disableCurrent();
-        pencil_ = true;
-    } */
 }
 
 void ToolGui::choosePen(bool& pressed) {
@@ -173,16 +165,6 @@ void ToolGui::choosePen(bool& pressed) {
     pen_ = true;
     current_tool_ = PEN;
     updateGui();
-    /*
-    if (pressed && current_tool_ != PEN) {
-        disableCurrent();
-        current_tool_ = PEN;
-        //pen_ = true;
-        updateGui();
-    } else if (!pressed && current_tool_ == PEN) {
-        //disableCurrent();
-        pen_ = true;
-    } */
 }
 
 void ToolGui::chooseEraser(bool& pressed) {
@@ -193,17 +175,6 @@ void ToolGui::chooseEraser(bool& pressed) {
     eraser_ = true;
     current_tool_ = ERASER;
     updateGui();
-    /*
-    // Some tool must always be active, so don't deactivate current tool
-    if (current_tool_ != ERASER && pressed) {
-        disableCurrent();
-        current_tool_ = ERASER;
-        eraser_ = true;
-        updateGui();
-    } else if (current_tool_ == ERASER) {
-        //disableCurrent();
-        eraser_= true;
-    }*/
 }
 
 void ToolGui::clearPressed() {
@@ -217,3 +188,13 @@ void ToolGui::undoPressed() {
 void ToolGui::redoPressed() {
     (*canvas).redo();
 }
+
+/*
+void ToolGui::savePressed() {
+    ofFileDialogResult result = ofSystemSaveDialog(default_filename, "save");
+    if(result.bSuccess) {
+        string name = result.getName();
+        (*canvas).saveImage(name);
+    }
+}
+*/

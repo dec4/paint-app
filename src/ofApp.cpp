@@ -100,6 +100,24 @@ void ofApp::redo() {
 	}
 }
 
+/*
+void ofApp::saveImage(std::string& filename) {
+	//makeCurrent();
+	img.grabScreen(0, 0 , ofGetWidth(), ofGetHeight());
+    img.save(filename);
+}
+*/
+
+void ofApp::keyPressed(int key) {
+	int upper_key = toupper(key);
+
+	if (upper_key == 'S') {
+		std::string default_filename = "img" + std::to_string(ofGetElapsedTimef()) + ".png";
+		img.grabScreen(0, 0 , ofGetWidth(), ofGetHeight());
+    	img.save(default_filename);
+	}
+}
+
 
 /* STARTER CODE
 
