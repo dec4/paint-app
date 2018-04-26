@@ -17,3 +17,8 @@ Starting off by implementing the settings window and drawing canvas independentl
 * Implemented undo and redo buttons
   * logic issue: when drawing new lines, you can't redo old lines that have been written over [UNRESOLVED]
     * old lines stay in stack; how to distinguish undo lines between valid and invalid? 
+* Implemented clear (note: cannot be undone)
+* Implemented save
+  * Tried using system dialogue box, but wasn't working properly
+  * Issue: first implementation would save screenshot of tool gui, not canvas
+    * Fixed, but with less than ideal implementation
