@@ -37,13 +37,13 @@ void ToolGui::setup() {
 
     // add set line roundness?
 
+    gui_.add(pencil_.setup("pencil", false));
+    gui_.add(pen_.setup("pen", true));
+    gui_.add(eraser_.setup("eraser", false));
     // Add listeners to simulate radio buttons
     pencil_.addListener(this, &ToolGui::ChoosePencil);
     pen_.addListener(this, &ToolGui::ChoosePen);
     eraser_.addListener(this, &ToolGui::ChooseEraser);
-    gui_.add(pencil_.setup("pencil", false));
-    gui_.add(pen_.setup("pen", true));
-    gui_.add(eraser_.setup("eraser", false));
 
     // Add radius slider
     gui_.add(radius_.setup("radius", 2, .5, 5));
@@ -143,36 +143,47 @@ void ToolGui::DisableAll() {
 
 
 // Functions to help simulate radio buttons
+// Each function is called whenever the corresponding
+// toggle is pressed (listener calls function)
+// bool& active = bool AFTER pressed
 
-void ToolGui::ChoosePencil(bool& changed) {
-    if (changed && pencil_ == true) {
-        DisableCurrent();
-        pencil_ = true;
+void ToolGui::ChoosePencil(bool& active) {
+    if (active) {
         current_tool_ = PENCIL;
-        UpdateGui();
-    } else if (changed && pencil_ == false) {
+        DisableAll();
         pencil_ = true;
+        UpdateGui();
+        std::cout << "1" << std::endl;
+    } else if (!active && current_tool_ == PENCIL) {
+        pencil_ = true;
+        std::cout << "1.5" << std::endl;
     }
 }
 
-void ToolGui::ChoosePen(bool& changed) {
-    if (!changed) {
-        return;
+void ToolGui::ChoosePen(bool& active) {
+    if (active) {
+        current_tool_ = PEN;
+        DisableAll();
+        pen_ = true;
+        UpdateGui();
+        std::cout << "2" << std::endl;
+    } else if (!active && current_tool_ == PEN) {
+        pen_ = true;
+        std::cout << "2.5" << std::endl;
     }
-    DisableAll();
-    pen_ = true;
-    current_tool_ = PEN;
-    UpdateGui();
 }
 
-void ToolGui::ChooseEraser(bool& changed) {
-    if (!changed) {
-        return;
+void ToolGui::ChooseEraser(bool& active) {
+    if (active) {
+        current_tool_ = ERASER;
+        DisableAll();
+        eraser_ = true;
+        UpdateGui();
+        std::cout << "3" << std::endl;
+    } else if (!active && current_tool_ == ERASER) {
+        eraser_ = true;
+        std::cout << "3.5" << std::endl;
     }
-    DisableAll();
-    eraser_ = true;
-    current_tool_ = ERASER;
-    UpdateGui();
 }
 
 void ToolGui::ClearPressed() {
