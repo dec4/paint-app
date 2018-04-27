@@ -180,17 +180,34 @@ void ToolGui::ChooseEraser(bool& active) {
 }
 
 void ToolGui::ClearPressed() {
-    (*canvas).ClearCanvas();
+    canvas->ClearCanvas();
 }
 
 void ToolGui::UndoPressed() {
-    (*canvas).Undo();
+    canvas->Undo();
 }
 
 void ToolGui::RedoPressed() {
-    (*canvas).Redo();
+    canvas->Redo();
 }
 
 void ToolGui::SavePressed() {
-    (*canvas).SaveImage();
+    canvas->SaveImage();
+}
+
+void ToolGui::keyPressed(int key) {
+	int upper_key = toupper(key);
+
+	if (upper_key == 'C') {
+		canvas->ClearCanvas();
+	}
+	else if (upper_key == 'U') {
+		canvas->Undo();
+	}
+	else if (upper_key == 'R') {
+		canvas->Redo();
+	}
+	else if (upper_key == 'S') {
+		canvas->SaveImage();
+	}
 }

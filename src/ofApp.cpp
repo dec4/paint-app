@@ -99,7 +99,7 @@ void ofApp::Redo() {
 	}
 }
 
-void ofApp::keyPressed(int key) {  // TODO: add other keyboard shortcuts
+void ofApp::keyPressed(int key) {
 	int upper_key = toupper(key);
 
 	if (upper_key == 'C') {

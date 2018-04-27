@@ -68,5 +68,7 @@ class ToolGui : public ofBaseApp {
 
 		int tool_gui_width_;
 		int tool_gui_height_;
+
+		void keyPressed(int key);
 };
 
