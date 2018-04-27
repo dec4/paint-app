@@ -55,16 +55,16 @@ void ToolGui::setup() {
     gui_.add(brightness_.setup("brightness", 255, 0, 255));
     gui_.add(alpha_.setup("alpha", 255, 0, 255));
 
-    gui_.add(clear_.setup("clear canvas"));
+    gui_.add(clear_.setup("clear canvas (c)"));
     clear_.addListener(this, &ToolGui::ClearPressed);
 
-    gui_.add(undo_.setup("undo"));
+    gui_.add(undo_.setup("undo (u)"));
     undo_.addListener(this, &ToolGui::UndoPressed);
 
-    gui_.add(redo_.setup("redo"));
+    gui_.add(redo_.setup("redo (r)"));
     redo_.addListener(this, &ToolGui::RedoPressed);
 
-    gui_.add(save_.setup("'S' in cavas to save"));
+    gui_.add(save_.setup("save image (s)"));
     save_.addListener(this,  &ToolGui::SavePressed);
 }
 

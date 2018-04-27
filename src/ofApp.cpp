@@ -102,7 +102,15 @@ void ofApp::Redo() {
 void ofApp::keyPressed(int key) {  // TODO: add other keyboard shortcuts
 	int upper_key = toupper(key);
 
-	
+	if (upper_key == 'C') {
+		ClearCanvas();
+	}
+	else if (upper_key == 'U') {
+		Undo();
+	}
+	else if (upper_key == 'R') {
+		Redo();
+	}
 	else if (upper_key == 'S') {
 		SaveImage();
 	}
@@ -121,7 +129,7 @@ void ofApp::SaveImage() {
 	ofPixels pixels;
     canvas_fbo_.readToPixels(pixels);
     // Save  
-	std::string default_filename = "img" + std::to_string(ofGetElapsedTimef()) + ".png"; 
+	std::string default_filename = "img" + ofGetTimestampString("%m-%d-%H-%M-%S-%i") + ".png"; 
     ofSaveImage(pixels, default_filename, OF_IMAGE_QUALITY_BEST); 
 	// Print save message in toolgui
 	ofResetElapsedTimeCounter();
