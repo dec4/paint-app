@@ -1,6 +1,5 @@
 #include "toolgui.h"
 #include <string>
-#include <iostream>  // for debugging
 
 //*** GETTERS ***//
 
@@ -21,6 +20,9 @@ float ToolGui::GetRadius() {
 //*** OPENFRAMEWORKS METHODS ***//
 
 void ToolGui::setup() {
+    tool_gui_width_ = ofGetWindowWidth();
+    tool_gui_height_ = ofGetWindowHeight();
+
     // Using ofParameter (see .h):
 	//parameters.add(radius.set("radius", 50, 1, 100));
 	//parameters.add(color.setHsb("color (hsba)", 100, 200, 100, 255));
@@ -63,7 +65,7 @@ void ToolGui::setup() {
     redo_.addListener(this, &ToolGui::RedoPressed);
 
     gui_.add(save_.setup("'S' in cavas to save"));
-    //save_.addListener(this,  &ToolGui::savePressed);
+    save_.addListener(this,  &ToolGui::SavePressed);
 }
 
 void ToolGui::update() { 
@@ -75,8 +77,15 @@ void ToolGui::update() {
 
 void ToolGui::draw() {
     ofSetColor(color_);
-    ofDrawCircle(ofGetWidth()/2, 0.85*ofGetHeight(), radius_);
-	gui_.draw();    // NOTENOTENOTE: USE ENUM TO DETERMINE WHICH GUI TO DRAW
+    ofDrawCircle(0.5*tool_gui_width_, 0.85*tool_gui_height_, radius_);
+	gui_.draw();
+    if (canvas->print_save_message_) {
+        ofSetColor(0, 0, 0);
+	    ofDrawBitmapString("Image Saved!", 0.3*tool_gui_width_, 0.95*tool_gui_height_);
+        if (ofGetElapsedTimeMillis() > 2000) {
+            canvas->print_save_message_ = false;
+        }
+    }
 }
 
 
@@ -86,23 +95,29 @@ void ToolGui::UpdateGui() {
     switch (current_tool_) {
         case PENCIL: 
             hue_ = 0;
+            hue_.setMin(0);
             hue_.setMax(0);
             saturation_ = 0;
+            saturation_.setMin(0);
             saturation_.setMax(0);
             brightness_ = 0;
+            brightness_.setMin(0);
             brightness_.setMax(255);
-            alpha_ = 255;
-            alpha_.setMax(255);
+            // alpha never changes, so it 
+            // never has to be reset
             break;
         case PEN:
             hue_ = 150;
+            hue_.setMin(0);
             hue_.setMax(255);
             saturation_ = 255;
+            saturation_.setMin(0);
             saturation_.setMax(255);
             brightness_ = 255;
+            brightness_.setMin(0);
             brightness_.setMax(255);
-            alpha_ = 255;
-            alpha_.setMax(255);
+            // alpha never changes, so it 
+            // never has to be reset
             break;
         case ERASER:
             hue_ = canvas->background_.getHue();
@@ -114,23 +129,8 @@ void ToolGui::UpdateGui() {
             brightness_ = canvas->background_.getBrightness();
             brightness_.setMin(canvas->background_.getBrightness());
             brightness_.setMax(canvas->background_.getBrightness());
-            alpha_ = 255;
-            alpha_.setMax(255);
-            break;
-    }
-}
-
-
-void ToolGui::DisableCurrent() {
-    switch (current_tool_) {
-        case PENCIL: 
-            pencil_ = false;
-            break;
-        case PEN:
-            pen_ = false;
-            break;
-        case ERASER:
-            eraser_ = false;
+            // alpha never changes, so it 
+            // never has to be reset
             break;
     }
 }
@@ -142,10 +142,9 @@ void ToolGui::DisableAll() {
 }
 
 
-// Functions to help simulate radio buttons
-// Each function is called whenever the corresponding
-// toggle is pressed (listener calls function)
-// bool& active = bool AFTER pressed
+//*** LISTENER FUNCTIONS ***//
+
+// Note for toggle functions: bool& active = toggle state AFTER pressed
 
 void ToolGui::ChoosePencil(bool& active) {
     if (active) {
@@ -153,10 +152,8 @@ void ToolGui::ChoosePencil(bool& active) {
         DisableAll();
         pencil_ = true;
         UpdateGui();
-        std::cout << "1" << std::endl;
     } else if (!active && current_tool_ == PENCIL) {
         pencil_ = true;
-        std::cout << "1.5" << std::endl;
     }
 }
 
@@ -166,10 +163,8 @@ void ToolGui::ChoosePen(bool& active) {
         DisableAll();
         pen_ = true;
         UpdateGui();
-        std::cout << "2" << std::endl;
     } else if (!active && current_tool_ == PEN) {
         pen_ = true;
-        std::cout << "2.5" << std::endl;
     }
 }
 
@@ -179,16 +174,13 @@ void ToolGui::ChooseEraser(bool& active) {
         DisableAll();
         eraser_ = true;
         UpdateGui();
-        std::cout << "3" << std::endl;
     } else if (!active && current_tool_ == ERASER) {
         eraser_ = true;
-        std::cout << "3.5" << std::endl;
     }
 }
 
 void ToolGui::ClearPressed() {
     (*canvas).ClearCanvas();
-    (*canvas).ClearUndoHistory();
 }
 
 void ToolGui::UndoPressed() {
@@ -197,4 +189,8 @@ void ToolGui::UndoPressed() {
 
 void ToolGui::RedoPressed() {
     (*canvas).Redo();
+}
+
+void ToolGui::SavePressed() {
+    (*canvas).SaveImage();
 }

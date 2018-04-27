@@ -1,9 +1,10 @@
 #include "ofApp.h"
-#include <iostream>  // for debugging
 
 
 void ofApp::setup() {
 	ofBackground(background_);  // Set background color
+	canvas_width_ = ofGetWidth();
+	canvas_height_ = ofGetHeight();
 }
 
 void ofApp::update() {	
@@ -24,7 +25,6 @@ void ofApp::mousePressed(int x, int y, int button) {
 	pt.set(x,y);
 
 	if (!drawing) {  // Create new line
-		std::cout << "new line" << std::endl; // for debugging
 		drawing = true;
 		redo_allowed_ = false;
 		ofColor color = (*tools).GetColor();
@@ -71,6 +71,7 @@ void ofApp::ClearCanvas() {
 		delete canvas_lines_.back();
 		canvas_lines_.pop_back();
 	}
+	ClearUndoHistory();
 }
 
 void ofApp::ClearUndoHistory() {
@@ -101,9 +102,33 @@ void ofApp::Redo() {
 void ofApp::keyPressed(int key) {  // TODO: add other keyboard shortcuts
 	int upper_key = toupper(key);
 
-	if (upper_key == 'S') {
-		std::string default_filename = "img" + std::to_string(ofGetElapsedTimef()) + ".png";
-		img.grabScreen(0, 0 , ofGetWidth(), ofGetHeight());
-    	img.save(default_filename);
+	
+	else if (upper_key == 'S') {
+		SaveImage();
 	}
+}
+
+// https://forum.openframeworks.cc/t/saving-a-fbo-to-an-image/10747
+// https://forum.openframeworks.cc/t/ofxfenster-addon-to-handle-multiple-windows-rewrite/6499/60
+void ofApp::SaveImage() {
+	// Create fbo
+	canvas_fbo_.allocate(canvas_width_, canvas_height_, GL_RGBA);
+	canvas_fbo_.begin();
+		ofBackground(background_);
+		draw();
+	canvas_fbo_.end();
+	// Get the frame buffer pixels  
+	ofPixels pixels;
+    canvas_fbo_.readToPixels(pixels);
+    // Save  
+	std::string default_filename = "img" + std::to_string(ofGetElapsedTimef()) + ".png"; 
+    ofSaveImage(pixels, default_filename, OF_IMAGE_QUALITY_BEST); 
+	// Print save message in toolgui
+	ofResetElapsedTimeCounter();
+	print_save_message_ = true;
+}
+
+void ofApp::windowResized(int w, int h) {
+	canvas_width_ = w;
+	canvas_height_ = h;
 }

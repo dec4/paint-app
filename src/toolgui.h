@@ -54,8 +54,7 @@ class ToolGui : public ofBaseApp {
 		void ChoosePencil(bool& pressed);
 		void ChoosePen(bool& pressed);
 		void ChooseEraser(bool& pressed);
-		// Helper functions for simulating radio buttons
-		void DisableCurrent();
+		// Helper function for simulating radio buttons
 		void DisableAll();
 
 		// Button listeners
@@ -63,8 +62,11 @@ class ToolGui : public ofBaseApp {
 		void UndoPressed();
 		void RedoPressed();
 
-		//void savePressed();
+		void SavePressed();
 
 		void UpdateGui();  // Changes parameters depending on selected tool
+
+		int tool_gui_width_;
+		int tool_gui_height_;
 };
 

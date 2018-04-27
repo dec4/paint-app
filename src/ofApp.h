@@ -18,6 +18,11 @@ class ofApp : public ofBaseApp {
 		void update();
 		void draw();
 
+		// Store window size in variables
+		void windowResized(int w, int h);
+		int canvas_width_;
+		int canvas_height_;
+
 		ofColor background_ = ofColor(255, 255, 255);
 
 		shared_ptr<ToolGui> tools;
@@ -42,7 +47,11 @@ class ofApp : public ofBaseApp {
 		void Redo();
 		bool redo_allowed_ = false;  // Can't redo something that was overwritten
 
-		// For saving image to file
-		ofImage img;
+		// For keyboard shortcuts of some tools
 		void keyPressed(int key);
+
+		// For saving image to file
+		ofFbo canvas_fbo_;
+		bool print_save_message_ = false;
+		void SaveImage();
 };
