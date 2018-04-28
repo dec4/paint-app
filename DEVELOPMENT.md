@@ -25,4 +25,4 @@ Starting off by implementing the settings window and drawing canvas independentl
     * ~~Fixed, but with less than ideal implementation~~
     * Now useing ofFbo
 * Added keyboard shortcuts; functions can be called from either canvas or toolgui
-
+* Note: not using custom hsbaColor object anymore (wanted to use ofParameter with it, but couldn't figure out how ofParameter creates sliders just with ofColor object, therefore couldn't figure out how to duplicate using custom object)
