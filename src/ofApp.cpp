@@ -1,6 +1,8 @@
 #include "ofApp.h"
 
 
+//*** OPENFRAMEWORKS METHODS ***/
+
 void ofApp::setup() {
 	ofBackground(background_);  // Set background color
 	canvas_width_ = ofGetWidth();
@@ -57,6 +59,31 @@ void ofApp::mouseExited(int x, int y) {
 	}
 }
 
+void ofApp::windowResized(int w, int h) {
+	canvas_width_ = w;
+	canvas_height_ = h;
+}
+
+void ofApp::keyPressed(int key) {
+	int upper_key = toupper(key);
+
+	if (upper_key == 'C') {
+		ClearCanvas();
+	}
+	else if (upper_key == 'U') {
+		Undo();
+	}
+	else if (upper_key == 'R') {
+		Redo();
+	}
+	else if (upper_key == 'S') {
+		SaveImage();
+	}
+}
+
+
+//*** MY METHODS ***//
+
 void ofApp::DrawCanvas() {
 	for (auto line : canvas_lines_) {
 		ofSetColor(line->GetColor());
@@ -99,28 +126,11 @@ void ofApp::Redo() {
 	}
 }
 
-void ofApp::keyPressed(int key) {
-	int upper_key = toupper(key);
-
-	if (upper_key == 'C') {
-		ClearCanvas();
-	}
-	else if (upper_key == 'U') {
-		Undo();
-	}
-	else if (upper_key == 'R') {
-		Redo();
-	}
-	else if (upper_key == 'S') {
-		SaveImage();
-	}
-}
-
 // https://forum.openframeworks.cc/t/saving-a-fbo-to-an-image/10747
 // https://forum.openframeworks.cc/t/ofxfenster-addon-to-handle-multiple-windows-rewrite/6499/60
 void ofApp::SaveImage() {
 	// Create fbo
-	canvas_fbo_.allocate(canvas_width_, canvas_height_, GL_RGBA);
+	canvas_fbo_.allocate(canvas_width_, canvas_height_, GL_RGB);
 	canvas_fbo_.begin();
 		ofBackground(background_);
 		draw();
@@ -130,13 +140,11 @@ void ofApp::SaveImage() {
     canvas_fbo_.readToPixels(pixels);
     // Save  
 	std::string default_filename = "img" + ofGetTimestampString("%m-%d-%H-%M-%S-%i") + ".png"; 
-    ofSaveImage(pixels, default_filename, OF_IMAGE_QUALITY_BEST); 
+    ofSaveImage(pixels, default_filename, OF_IMAGE_QUALITY_MEDIUM);
+		// NOTE: warning says ofImageCompressionType says only applies to JPEGs, 
+		// but OF documentation for ofSaveImage() implies you can use it with png ???
+		// (so instead saves with default: OF_IMAGE_QUALITY_BEST)
 	// Print save message in toolgui
 	ofResetElapsedTimeCounter();
 	print_save_message_ = true;
-}
-
-void ofApp::windowResized(int w, int h) {
-	canvas_width_ = w;
-	canvas_height_ = h;
 }

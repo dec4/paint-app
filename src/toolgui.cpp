@@ -1,20 +1,16 @@
 #include "toolgui.h"
 #include <string>
 
+
 //*** GETTERS ***//
 
 ofColor ToolGui::GetColor() {
     return color_;
 }
 
-DrawingTool ToolGui::GetTool() {
-    return current_tool_;
-}
-
 float ToolGui::GetRadius() {
     return radius_;
 }
-
 
 
 //*** OPENFRAMEWORKS METHODS ***//
@@ -23,21 +19,7 @@ void ToolGui::setup() {
     tool_gui_width_ = ofGetWindowWidth();
     tool_gui_height_ = ofGetWindowHeight();
 
-    // Using ofParameter (see .h):
-	//parameters.add(radius.set("radius", 50, 1, 100));
-	//parameters.add(color.setHsb("color (hsba)", 100, 200, 100, 255));
-    // compare to rsb: parameters.add(color.set("color",100,ofColor(0,0),255));
-    //gui.setup(parameters);
-    // NOTE: USE PARAMETERS IF CREATE OWN HSBACOLOR OBJECT
-    // ^SAME FOR DRAWING TOOL?
-    // Also note using ofParameter will allow changes in range (https://forum.openframeworks.cc/t/dynamic-range-in-ofxslider-ofxgui/15424)
-
     gui_.setup();   
-
-    // set resolution
-    //ofSetCircleResolution(100);
-
-    // add set line roundness?
 
     gui_.add(pencil_.setup("pencil", false));
     gui_.add(pen_.setup("pen", true));
@@ -70,9 +52,9 @@ void ToolGui::setup() {
 
 void ToolGui::update() { 
     // Update color based off of sliders
-    // Note: using update instead of listeners because then it's one line
-    // vs setting color in four different listeners
     color_.setHsb(hue_, saturation_, brightness_, alpha_);
+        // Note: using update instead of listeners because then it's 
+        // one line vs setting color in four different listeners
 }
 
 void ToolGui::draw() {
@@ -86,6 +68,23 @@ void ToolGui::draw() {
             canvas->print_save_message_ = false;
         }
     }
+}
+
+void ToolGui::keyPressed(int key) {
+	int upper_key = toupper(key);
+
+	if (upper_key == 'C') {
+		canvas->ClearCanvas();
+	}
+	else if (upper_key == 'U') {
+		canvas->Undo();
+	}
+	else if (upper_key == 'R') {
+		canvas->Redo();
+	}
+	else if (upper_key == 'S') {
+		canvas->SaveImage();
+	}
 }
 
 
@@ -193,21 +192,4 @@ void ToolGui::RedoPressed() {
 
 void ToolGui::SavePressed() {
     canvas->SaveImage();
-}
-
-void ToolGui::keyPressed(int key) {
-	int upper_key = toupper(key);
-
-	if (upper_key == 'C') {
-		canvas->ClearCanvas();
-	}
-	else if (upper_key == 'U') {
-		canvas->Undo();
-	}
-	else if (upper_key == 'R') {
-		canvas->Redo();
-	}
-	else if (upper_key == 'S') {
-		canvas->SaveImage();
-	}
 }
