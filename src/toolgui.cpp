@@ -16,6 +16,7 @@ float ToolGui::GetRadius() {
 //*** OPENFRAMEWORKS METHODS ***//
 
 void ToolGui::setup() {
+    // Initialize width and height variables
     tool_gui_width_ = ofGetWindowWidth();
     tool_gui_height_ = ofGetWindowHeight();
 
@@ -24,14 +25,16 @@ void ToolGui::setup() {
     gui_.add(pencil_.setup("pencil", false));
     gui_.add(pen_.setup("pen", true));
     gui_.add(eraser_.setup("eraser", false));
-    // Add listeners to simulate radio buttons
+    // Listeners used to simulate radio buttons
     pencil_.addListener(this, &ToolGui::ChoosePencil);
     pen_.addListener(this, &ToolGui::ChoosePen);
     eraser_.addListener(this, &ToolGui::ChooseEraser);
 
-    // Add radius slider
     gui_.add(radius_.setup("radius", 2, .5, 5));
-    // Add color sliders
+    gui_.add(thick_.setup("thicken stroke", false));
+    thick_.addListener(this, &ToolGui::ThickPressed);
+
+    // Color parameters
     gui_.add(hue_.setup("hue", 150, 0, 255));
     gui_.add(saturation_.setup("saturation", 255, 0, 255));
     gui_.add(brightness_.setup("brightness", 255, 0, 255));
@@ -99,7 +102,7 @@ void ToolGui::UpdateGui() {
             saturation_ = 0;
             saturation_.setMin(0);
             saturation_.setMax(0);
-            brightness_ = 0;
+            brightness_ = 150;
             brightness_.setMin(0);
             brightness_.setMax(255);
             // alpha never changes, so it 
@@ -176,6 +179,10 @@ void ToolGui::ChooseEraser(bool& active) {
     } else if (!active && current_tool_ == ERASER) {
         eraser_ = true;
     }
+}
+
+void ToolGui::ThickPressed(bool& active) {
+    canvas->thicken_ = active;
 }
 
 void ToolGui::ClearPressed() {

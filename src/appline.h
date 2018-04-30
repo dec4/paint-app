@@ -1,4 +1,4 @@
-//  custom line class so that they can be printed 
+//  custom line class so that they can be drawn 
 //  individually with different properties
 
 #pragma once
@@ -12,9 +12,10 @@ public:
     AppLine() {
         line_ = new ofPolyline();
     }
-    explicit AppLine(ofPoint& start_point, ofColor& color, float& radius) {
+    explicit AppLine(ofPoint& start_point, ofColor& color, float& radius, bool& thicken) {
         color_ = color;
         radius_ = radius;
+        thick_ = thicken;
         line_ = new ofPolyline();
         line_->addVertex(start_point);
     };
@@ -23,6 +24,7 @@ public:
     ofPolyline GetLine();
     ofColor GetColor();
     float GetWidth();
+    bool IsThick();
 
     // MODIFIERS
     void AddPoint(ofPoint& pt);
@@ -31,4 +33,5 @@ private:
     ofPolyline* line_;
     ofColor color_;
     float radius_;
+    bool thick_;
 };

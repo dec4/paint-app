@@ -9,12 +9,12 @@
 
 int main( ) {
 
-	// MY NOTE: use makeShared (https://docs.microsoft.com/en-us/cpp/cpp/how-to-create-and-use-shared-ptr-instances)
+	// MY NOTE: use makeShared? (https://docs.microsoft.com/en-us/cpp/cpp/how-to-create-and-use-shared-ptr-instances)
 
 	ofGLFWWindowSettings settings;
 
 	// Settings for first window: canvas
-	settings.width = 600;
+	settings.width = 800;
 	settings.height = 600;
 	settings.setPosition(ofVec2f(0,0));
 	settings.resizable = true;
@@ -23,7 +23,7 @@ int main( ) {
 	// Settings for second window: tools
 	settings.width = 220;
 	settings.height = 350;
-	settings.setPosition(ofVec2f(700,0));
+	settings.setPosition(ofVec2f(900,0));
 	settings.resizable = false;
 	shared_ptr<ofAppBaseWindow> tool_window = ofCreateWindow(settings);
 
@@ -39,3 +39,25 @@ int main( ) {
 	ofRunMainLoop();
 
 }
+
+
+
+/* NOTES
+
+	OBJECT OBJECT INSTEAD OF JUST LINE; DO MANY THINGS
+	~/OF/OF/examples/graphics/polygonExample
+	(probably won't figure this out)
+		-abstract class of 
+
+	ADD HELP ICON TOP RIGHT
+
+	CHANGE PREVIEW TO BAR INSTEAD OF TINY 
+		-color preview (square)
+		-radius preview (tiny dot)
+
+	ADD ALLOW MOUSE EXIT
+
+	get rid of thickness if can't fix segfault
+
+
+*/

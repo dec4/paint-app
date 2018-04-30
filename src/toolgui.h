@@ -8,7 +8,7 @@ class ofApp;
 
 class ToolGui : public ofBaseApp {
 
-	enum DrawingTool {
+	enum ToolType { // TODO: MAKE PUBLIC AND RENAME TO TOOL TYPE
 		PENCIL,
 		PEN,
 		ERASER
@@ -42,8 +42,9 @@ class ToolGui : public ofBaseApp {
 		ofxToggle pen_;
 		ofxToggle pencil_;
 		ofxToggle eraser_;
-		// Radius slider
+		// Size modifiers
 		ofxFloatSlider radius_;
+		ofxToggle thick_;
 		// Color sliders
 		ofxIntSlider hue_;
 		ofxIntSlider saturation_;
@@ -59,7 +60,7 @@ class ToolGui : public ofBaseApp {
 		// Updated using hsba slider info in update()
 		ofColor color_;
 
-		DrawingTool current_tool_ = PEN;
+		ToolType current_tool_ = PEN;
 		// Tool toggle listeners
 		void ChoosePencil(bool& pressed);
 		void ChoosePen(bool& pressed);
@@ -69,7 +70,8 @@ class ToolGui : public ofBaseApp {
 		// Change slider parameters depending on selected tool
 		void UpdateGui();
 
-		// Button listeners
+		// Other listeners
+		void ThickPressed(bool& active);
 		void ClearPressed();
 		void UndoPressed();
 		void RedoPressed();

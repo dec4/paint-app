@@ -12,6 +12,10 @@ float AppLine::GetWidth() {
     return radius_*2;
 }
 
+bool AppLine::IsThick() {
+    return thick_;
+}
+
 void AppLine::AddPoint(ofPoint& pt) {
     line_->addVertex(pt);
 }

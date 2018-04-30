@@ -16,9 +16,18 @@ void ofApp::update() {
 void ofApp::draw() {
 	DrawCanvas();
 	if (drawing) {  // Draw current line since it hasn't been added to canvas_lines_ yet
+		float width = current_line_->GetWidth();
 		ofSetColor(current_line_->GetColor());
-		ofSetLineWidth(current_line_->GetWidth());
+		ofSetLineWidth(width);
 		(current_line_->GetLine()).draw();
+		/*
+		if (current_line_->IsThick()) {
+			ofTranslate(-width/2, -width/2);
+			(current_line_->GetLine()).draw();
+			ofTranslate(width, width);
+			(current_line_->GetLine()).draw();
+		}
+		*/
 	}
 }
 
@@ -31,7 +40,7 @@ void ofApp::mousePressed(int x, int y, int button) {
 		redo_allowed_ = false;
 		ofColor color = (*tools).GetColor();
 		float radius = (*tools).GetRadius();
-		current_line_ = new AppLine(pt, color, radius);
+		current_line_ = new AppLine(pt, color, radius, thicken_);
 		ClearUndoHistory();
 	} else {  // Add to current line
 		current_line_->AddPoint(pt);
@@ -86,9 +95,18 @@ void ofApp::keyPressed(int key) {
 
 void ofApp::DrawCanvas() {
 	for (auto line : canvas_lines_) {
+		float width = line->GetWidth();
 		ofSetColor(line->GetColor());
-		ofSetLineWidth(line->GetWidth());
+		ofSetLineWidth(width);
 		(line->GetLine()).draw();
+		/*
+		if (line->IsThick()) {
+			ofTranslate(-width/2, -width/2);
+			(current_line_->GetLine()).draw();
+			ofTranslate(width, width);
+			(current_line_->GetLine()).draw();
+		}
+		*/
 	}
 }
 

@@ -54,4 +54,6 @@ class ofApp : public ofBaseApp {
 		ofFbo canvas_fbo_;
 		bool print_save_message_ = false;
 		void SaveImage();
+
+		bool thicken_ = false;
 };
