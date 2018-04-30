@@ -20,16 +20,28 @@ void ToolGui::setup() {
     tool_gui_width_ = ofGetWindowWidth();
     tool_gui_height_ = ofGetWindowHeight();
 
-    gui_.setup();   
+    // Initialize background color to match canvas
+    //ofBackground(canvas->background_);
+    // TODO: decide: use default so that eraser preview can be seen?
 
-    gui_.add(pencil_.setup("pencil", false));
-    gui_.add(pen_.setup("pen", true));
-    gui_.add(eraser_.setup("eraser", false));
+    // Initialize drawing tools
+    pen_ = new Pen();
+    pencil_ = new Pencil();
+    eraser_ = new Eraser(&(canvas->background_));
+    current_tool_ = pen_;
+
+    gui_.setup();  // Everything below is for setting up gui:
+
+    // Drawing Tools
+    gui_.add(pencil_toggle_.setup("pencil", false));
+    gui_.add(pen_toggle_.setup("pen", true));
+    gui_.add(eraser_toggle_.setup("eraser", false));
     // Listeners used to simulate radio buttons
-    pencil_.addListener(this, &ToolGui::ChoosePencil);
-    pen_.addListener(this, &ToolGui::ChoosePen);
-    eraser_.addListener(this, &ToolGui::ChooseEraser);
+    pencil_toggle_.addListener(this, &ToolGui::ChoosePencil);
+    pen_toggle_.addListener(this, &ToolGui::ChoosePen);
+    eraser_toggle_.addListener(this, &ToolGui::ChooseEraser);
 
+    // Size parameters
     gui_.add(radius_.setup("radius", 2, .5, 5));
     gui_.add(thick_.setup("thicken stroke", false));
     thick_.addListener(this, &ToolGui::ThickPressed);
@@ -40,15 +52,19 @@ void ToolGui::setup() {
     gui_.add(brightness_.setup("brightness", 255, 0, 255));
     gui_.add(alpha_.setup("alpha", 255, 0, 255));
 
+    // Clear
     gui_.add(clear_.setup("clear canvas (c)"));
     clear_.addListener(this, &ToolGui::ClearPressed);
 
+    // Undo
     gui_.add(undo_.setup("undo (u)"));
     undo_.addListener(this, &ToolGui::UndoPressed);
 
+    // Redo
     gui_.add(redo_.setup("redo (r)"));
     redo_.addListener(this, &ToolGui::RedoPressed);
 
+    // Save
     gui_.add(save_.setup("save image (s)"));
     save_.addListener(this,  &ToolGui::SavePressed);
 }
@@ -94,53 +110,24 @@ void ToolGui::keyPressed(int key) {
 //*** PRIVATE METHODS ***//
 
 void ToolGui::UpdateGui() {
-    switch (current_tool_) {
-        case PENCIL: 
-            hue_ = 0;
-            hue_.setMin(0);
-            hue_.setMax(0);
-            saturation_ = 0;
-            saturation_.setMin(0);
-            saturation_.setMax(0);
-            brightness_ = 150;
-            brightness_.setMin(0);
-            brightness_.setMax(255);
-            // alpha never changes, so it 
-            // never has to be reset
-            break;
-        case PEN:
-            hue_ = 150;
-            hue_.setMin(0);
-            hue_.setMax(255);
-            saturation_ = 255;
-            saturation_.setMin(0);
-            saturation_.setMax(255);
-            brightness_ = 255;
-            brightness_.setMin(0);
-            brightness_.setMax(255);
-            // alpha never changes, so it 
-            // never has to be reset
-            break;
-        case ERASER:
-            hue_ = canvas->background_.getHue();
-            hue_.setMin(canvas->background_.getHue());
-            hue_.setMax(canvas->background_.getHue());
-            saturation_ = canvas->background_.getSaturation();
-            saturation_.setMin(canvas->background_.getSaturation());
-            saturation_.setMax(canvas->background_.getSaturation());
-            brightness_ = canvas->background_.getBrightness();
-            brightness_.setMin(canvas->background_.getBrightness());
-            brightness_.setMax(canvas->background_.getBrightness());
-            // alpha never changes, so it 
-            // never has to be reset
-            break;
-    }
+    hue_ = current_tool_->LastHue();
+    hue_.setMin(current_tool_->HueMin());
+    hue_.setMax(current_tool_->HueMax());
+    saturation_ = current_tool_->LastSaturation();
+    saturation_.setMin(current_tool_->SaturationMin());
+    saturation_.setMax(current_tool_->SaturatinMax());
+    brightness_ = current_tool_->LastBrightness();
+    brightness_.setMin(current_tool_->BrightnessMin());
+    brightness_.setMax(current_tool_->BrightnessMax());
+    alpha_ = current_tool_->LastAlpha();
+    alpha_.setMin(current_tool_->AlphaMin());
+    alpha_.setMax(current_tool_->AlphaMax());
 }
 
 void ToolGui::DisableAll() {
-    pencil_ = false;
-    pen_ = false;
-    eraser_ = false;
+    pencil_toggle_ = false;
+    pen_toggle_ = false;
+    eraser_toggle_ = false;
 }
 
 
@@ -150,34 +137,37 @@ void ToolGui::DisableAll() {
 
 void ToolGui::ChoosePencil(bool& active) {
     if (active) {
-        current_tool_ = PENCIL;
+        current_tool_->SaveLastState(hue_, saturation_, brightness_, alpha_);
+        current_tool_ = pencil_;
         DisableAll();
-        pencil_ = true;
+        pencil_toggle_ = true;
         UpdateGui();
-    } else if (!active && current_tool_ == PENCIL) {
-        pencil_ = true;
+    } else if (!active && current_tool_ == pencil_) {
+        pencil_toggle_ = true;
     }
 }
 
 void ToolGui::ChoosePen(bool& active) {
     if (active) {
-        current_tool_ = PEN;
+        current_tool_->SaveLastState(hue_, saturation_, brightness_, alpha_);
+        current_tool_ = pen_;
         DisableAll();
-        pen_ = true;
+        pen_toggle_ = true;
         UpdateGui();
-    } else if (!active && current_tool_ == PEN) {
-        pen_ = true;
+    } else if (!active && current_tool_ == pen_) {
+        pen_toggle_ = true;
     }
 }
 
 void ToolGui::ChooseEraser(bool& active) {
     if (active) {
-        current_tool_ = ERASER;
+        current_tool_->SaveLastState(hue_, saturation_, brightness_, alpha_);
+        current_tool_ = eraser_;
         DisableAll();
-        eraser_ = true;
+        eraser_toggle_ = true;
         UpdateGui();
-    } else if (!active && current_tool_ == ERASER) {
-        eraser_ = true;
+    } else if (!active && current_tool_ == eraser_) {
+        eraser_toggle_ = true;
     }
 }
 

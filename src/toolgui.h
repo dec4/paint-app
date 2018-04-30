@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxGui.h"
 #include "ofApp.h"
+#include "drawingtool.h"
 
 class ofApp;
 
@@ -34,14 +35,17 @@ class ToolGui : public ofBaseApp {
 		int tool_gui_width_;
 		int tool_gui_height_;
 
+		// Background color
+		//ofColor* background_;
+
 		// For keyboard shortcuts
 		void keyPressed(int key);
 
 		ofxPanel gui_;
 		// Drawing tool toggles
-		ofxToggle pen_;
-		ofxToggle pencil_;
-		ofxToggle eraser_;
+		ofxToggle pen_toggle_;
+		ofxToggle pencil_toggle_;
+		ofxToggle eraser_toggle_;
 		// Size modifiers
 		ofxFloatSlider radius_;
 		ofxToggle thick_;
@@ -60,7 +64,13 @@ class ToolGui : public ofBaseApp {
 		// Updated using hsba slider info in update()
 		ofColor color_;
 
-		ToolType current_tool_ = PEN;
+		//ToolType current_tool_ = PEN;
+		// Create instance of each tool
+		Pen* pen_;
+		Pencil* pencil_;
+		Eraser* eraser_;
+		// Track current tool using a pointer
+		DrawingTool* current_tool_;
 		// Tool toggle listeners
 		void ChoosePencil(bool& pressed);
 		void ChoosePen(bool& pressed);
