@@ -20,6 +20,7 @@ class ToolGui : public ofBaseApp {
 		ofColor GetColor();
 		float GetRadius();
 
+		// Pointer to app in ofApp window (canvas)
 		shared_ptr<ofApp> canvas;
 
 	private:
@@ -29,31 +30,30 @@ class ToolGui : public ofBaseApp {
 		int tool_gui_width_;
 		int tool_gui_height_;
 
-		// Background color
-		//ofColor* background_;
-
-		// Spiral preview
-		ofPolyline spiral_;
-		void InitializeSpiral();
+		// Wave preview
+		ofPolyline wave_;
+		void InitializeWave();
 
 		// For keyboard shortcuts
+		// Shortcuts for actions only (clear, undo, redo, save)
 		void keyPressed(int key);
 
-		ofxPanel gui_;
+		ofxPanel settings_gui_;
 		// Drawing tool toggles
 		ofxToggle pen_toggle_;
 		ofxToggle pencil_toggle_;
 		ofxToggle eraser_toggle_;
 		// Size modifier
 		ofxFloatSlider radius_;
-		// Exit without ending line
-		ofxToggle can_exit_;
 		// Color sliders
 		ofxIntSlider hue_;
 		ofxIntSlider saturation_;
 		ofxIntSlider brightness_;
 		ofxIntSlider alpha_;
+		// Toggle to allow exit without ending line
+		ofxToggle bounded_;
 		// Buttons for other functions
+		ofxButton background_;
 		ofxButton clear_;
 		ofxButton undo_;
 		ofxButton redo_;
@@ -80,7 +80,8 @@ class ToolGui : public ofBaseApp {
 		void UpdateGui();
 
 		// Other listeners
-		void ExitPressed(bool& active);
+		void BoundedPressed(bool& active);
+		void BackgroundPressed();
 		void ClearPressed();
 		void UndoPressed();
 		void RedoPressed();

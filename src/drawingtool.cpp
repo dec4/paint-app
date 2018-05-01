@@ -1,6 +1,8 @@
 #include "drawingtool.h"
 
 
+//----- GETTERS -----//
+
 int DrawingTool::HueMin() {
     return hue_min_;
 }
@@ -51,7 +53,13 @@ int DrawingTool::LastAlpha() {
 }
 
 
-void DrawingTool::SaveLastState(int hue, int saturation, int brightness, int alpha) {
+/**
+ * Saves the last state of tool.
+ * Used so that when switched back, it can switch to last state 
+ * rather than some default value. Also note that only last values 
+ * are saved because the min and max are fixed at initialization.
+ */
+void DrawingTool::SaveState(int hue, int saturation, int brightness, int alpha) {
     last_hue_ = hue;
     last_saturation_ = saturation;
     last_brightness_ = brightness;

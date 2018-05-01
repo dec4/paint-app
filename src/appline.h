@@ -7,30 +7,27 @@
 
 class AppLine {
 public:
-    // CONSTRUCTORS (ADD INITIALIZATIONS)
+    // Constructors (and initializations)
     AppLine() {
         line_ = new ofPolyline();
     }
-    explicit AppLine(ofPoint& start_point, ofColor& color, float& radius, bool& thicken) {
+    explicit AppLine(ofPoint& start_point, ofColor& color, float& radius) {
         color_ = color;
         radius_ = radius;
-        thick_ = thicken;
         line_ = new ofPolyline();
         line_->addVertex(start_point);
     };
 
-    // GETTERS
+    // Getters
     ofPolyline GetLine();
     ofColor GetColor();
     float GetWidth();
-    bool IsThick();
 
-    // MODIFIERS
+    // Add point to this ofPolyline
     void AddPoint(ofPoint& pt);
 
 private:
     ofPolyline* line_;
     ofColor color_;
     float radius_;
-    bool thick_;
 };

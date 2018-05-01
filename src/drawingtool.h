@@ -6,6 +6,7 @@
 class DrawingTool {
 
 public:
+    // min and max getters
     int HueMin();
     int HueMax();
     int SaturationMin();
@@ -14,15 +15,20 @@ public:
     int BrightnessMax();
     int AlphaMin();
     int AlphaMax();
-
+    // last state getters
     int LastHue();
     int LastSaturation();
     int LastBrightness();
     int LastAlpha();
 
-    void SaveLastState(int hue, int saturation, int brightness, int alpha);
+    // Saves the last state of tool
+    // Used so that when switched back, it can switch to last state 
+    // rather than some default value. Also note that only last values
+    // are saved because the min and max are fixed at initialization.
+    void SaveState(int hue, int saturation, int brightness, int alpha);
 
 protected:
+    // min and max values
     int hue_min_;
     int hue_max_;
     int saturation_min_;
@@ -31,7 +37,7 @@ protected:
     int brightness_max_;
     int alpha_min_;
     int alpha_max_;
-
+    // last state  values
     int last_hue_;
     int last_saturation_;
     int last_brightness_;
@@ -39,9 +45,12 @@ protected:
 };
 
 
+//----- SPECIFIC DRAWING TOOLS -----//
+// Each drawing tool has a specific default constructor that
+// initializes all the varables above, depending on the tool
+
 class Pencil : public DrawingTool {
 public:
-    // Default constructor
     Pencil() {
         hue_min_ = 0;
         hue_max_ = 0;
@@ -61,7 +70,6 @@ public:
 
 class Pen : public DrawingTool {
 public:
-    // Default constructor
     Pen() {
         hue_min_ = 0;
         hue_max_ = 255;
@@ -81,7 +89,6 @@ public:
 
 class Eraser : public DrawingTool {
 public:
-    // Default constructor
     Eraser(ofColor* background) {
         hue_min_ = background->getHue();
         hue_max_ = background->getHue();

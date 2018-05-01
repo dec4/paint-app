@@ -3,88 +3,103 @@
 #include <iostream>
 
 
-
-//*** OPENFRAMEWORKS METHODS ***/
+//----- MAIN OPENFRAMEWORKS LOOP -----//
 
 void ofApp::setup() {
-	ofBackground(background_);  // Set background color
+	// Set Background Color
+	ofBackground(background_);
+
+	// Store width and height of canvas
 	canvas_width_ = ofGetWidth();
 	canvas_height_ = ofGetHeight();
 
-	// Get point for instructions_icon_ position
-	//ofPoint pt;
-	//pt.set(canvas_width_-20, 0);
-	//instructions_icon_ = ofRectangle(pt, 20, 20);
+	// Set up instructions stringstream
 	SetupInstructions();
+
+	// Set up help icon
 	help_button_.load("cooperBlack.ttf", 12, true, true, true);
 }
 
 void ofApp::update() {	
+	// Update Background
 	ofBackground(background_);
+
+	// Update location of help click zone
+	// Necessary because window size may change
+	// Need point because of ofRectangle parameter
 	ofPoint pt;
 	pt.set(canvas_width_-30, 0);
-	instructions_icon_ = ofRectangle(pt, 20, 20);
+	help_click_zone_ = ofRectangle(pt, 20, 20);
 }
 
 void ofApp::draw() {
-	if (print_q) {
-		//ofSetColor(0,0,0);
-		//ofDrawBitmapString("?", canvas_width_-20, 20);
-		//ofSetColor(255);
-		//ofEnableAlphaBlending();
-		//qmark.draw(canvas_width_/2, canvas_height_/2);
-		//ofDisableAlphaBlending();
-		ofSetColor(0);
-		ofFill();
-		help_button_.drawString("?", canvas_width_-20, 20);
-	}
+	// Print instructions; returns when done so that drawing does not block words
 	if (print_instructions_) {
-		ofSetColor(0);
+		// Depending on background lightness, make text white or black for readability
+		(background_.getLightness() > 100) ? ofSetColor(0) : ofSetColor(255);
 		ofDrawBitmapString(instructions_.str(), 20, 20);
 		return;
 	}
 
-	DrawCanvas();
-	if (drawing) {  // Draw current line since it hasn't been added to canvas_lines_ yet
-		float width = current_line_->GetWidth();
-		ofSetColor(current_line_->GetColor());
-		ofSetLineWidth(width);
-		(current_line_->GetLine()).draw();
-		/*
-		if (current_line_->IsThick()) {
-			ofTranslate(-width/2, -width/2);
-			(current_line_->GetLine()).draw();
-			ofTranslate(width, width);
-			(current_line_->GetLine()).draw();
-		}
-		*/
+	// Draw lines on canvas
+	for (auto line : canvas_lines_) {
+		DrawLine(*line);
+	}
+	// Draw current_line_ separately because each line is not added 
+	// to canvas_lines_ until user is finished drawing
+	if (drawing) {
+		DrawLine(*current_line_);
+	}
+
+	// Even though the question mark will always be visible while using the app, this
+	// section is controlled by a boolean so that it does not draw on saved image
+	if (print_q) {
+		// Depending on background lightness, make text white or black for readability
+		(background_.getLightness() > 100) ? ofSetColor(0) : ofSetColor(255);
+		ofFill();
+		help_button_.drawString("?", canvas_width_-20, 20);
+		ofNoFill();
 	}
 }
 
+
+//----- OTHER OPENFRAMEWORKS METHODS -----//
+
+/**
+ * Possible actions when mouse is pressed:
+ * 1) Start drawing
+ * 2) End drawing
+ * 3) Print instructions if clicked help icon
+ * 4) Stop printing instructions (go back to canvas)
+ */
 void ofApp::mousePressed(int x, int y, int button) {
+	// Get point of click
 	ofPoint pt;
 	pt.set(x,y);
 
-	// If instructions are still being drawn, stop
+	// If instructions are still being drawn, stop on click press
+	// return so that it doesn't start drawing a line
 	if (print_instructions_) {
 		print_instructions_ = false;
 		return;
 	}
 
-	if (!drawing && instructions_icon_.inside(pt)) {
+	// Draw instructions if clicked on help icon
+	if (!drawing && help_click_zone_.inside(pt)) {
 		print_instructions_ = true;
 		return;
 	}
-	// Create new line
+
+	// Create new line if not already drawing
 	else if (!drawing) { 
 		drawing = true;
-		redo_allowed_ = false;
+		redo_allowed_ = false; // Can't redo if there's nothing to redo
 		ofColor color = (*tools).GetColor();
 		float radius = (*tools).GetRadius();
-		current_line_ = new AppLine(pt, color, radius, thicken_);
+		current_line_ = new AppLine(pt, color, radius);
 		ClearUndoHistory();
 	}
-	// Add to current line
+	// Add to current line if drawing
 	else { 
 		current_line_->AddPoint(pt);
 		canvas_lines_.push_back(current_line_); 
@@ -93,7 +108,11 @@ void ofApp::mousePressed(int x, int y, int button) {
 	}
 }
 
+/**
+ * Track mouse movement; only matters if drawing.
+ */
 void ofApp::mouseMoved(int x, int y ) {	
+	// Only matters if drawing
 	if (drawing) {
 		ofPoint pt;
 		pt.set(x,y);
@@ -101,11 +120,15 @@ void ofApp::mouseMoved(int x, int y ) {
 	} 
 }
 
+/**
+ * Use bounded_ to determine action upon exit; only matters if drawing.
+ */
 void ofApp::mouseExited(int x, int y) {
 	if (drawing) {
 		ofPoint pt;
 		pt.set(x,y);
 		current_line_->AddPoint(pt);
+		// Determine whether or not to end line upon exit
 		if (bounded_) {
 			canvas_lines_.push_back(current_line_); 
 			drawing = false;
@@ -113,11 +136,18 @@ void ofApp::mouseExited(int x, int y) {
 	}
 }
 
+/**
+ * Update variables that store window size
+ */
 void ofApp::windowResized(int w, int h) {
 	canvas_width_ = w;
 	canvas_height_ = h;
 }
 
+/**
+ * Used for keyboard shortcuts.
+ * Contains shortcuts for ACTIONS only (not settings)
+ */
 void ofApp::keyPressed(int key) {
 	int upper_key = toupper(key);
 
@@ -136,27 +166,24 @@ void ofApp::keyPressed(int key) {
 }
 
 
-//*** MY METHODS ***//
+//----- MY METHODS -----//
 
-void ofApp::DrawCanvas() {
-	for (auto line : canvas_lines_) {
-		float width = line->GetWidth();
-		ofSetColor(line->GetColor());
-		ofSetLineWidth(width);
-		(line->GetLine()).draw();
-		/*
-		if (line->IsThick()) {
-			ofTranslate(-width/2, -width/2);
-			(current_line_->GetLine()).draw();
-			ofTranslate(width, width);
-			(current_line_->GetLine()).draw();
-		}
-		*/
-	}
+/**
+ * Helper method to draw (display) a line on canvas.
+ */
+void ofApp::DrawLine(AppLine& line) {
+	float width = line.GetWidth();
+	ofSetColor(line.GetColor());
+	ofSetLineWidth(width);
+	(line.GetLine()).draw();
 }
 
+/**
+ * Clears (i.e. erases) the whole canvas.
+ * NOTE: due to limitations of objects and design, 
+ * this will NOT be able to be undone
+ */
 void ofApp::ClearCanvas() {
-	// NOTE due to limitations of objects and design, this will NOT be able to be undone
 	while (!canvas_lines_.empty()) {
 		delete canvas_lines_.back();
 		canvas_lines_.pop_back();
@@ -164,6 +191,10 @@ void ofApp::ClearCanvas() {
 	ClearUndoHistory();
 }
 
+/**
+ * Helper method to clear the lines in redo_lines_.
+ * Prevents lines from being saved after they're overwritten
+ */
 void ofApp::ClearUndoHistory() {
 	while (!redo_lines_.empty()) {
 		delete redo_lines_.top();
@@ -171,6 +202,9 @@ void ofApp::ClearUndoHistory() {
 	}
 }
 
+/**
+ * Undo method: moves top line from canvas_lines_ to redo_lines_.
+ */
 void ofApp::Undo() {
 	if (canvas_lines_.empty()) {
 		return;
@@ -178,9 +212,12 @@ void ofApp::Undo() {
 	auto temp = canvas_lines_.back();
 	canvas_lines_.pop_back();
 	redo_lines_.push(temp);
-	redo_allowed_ = true;
+	redo_allowed_ = true;  // Can only redo if something has been undone
 }
 
+/**
+ * Redo method: moves top line from redo_lines_ to canvas_lines_.
+ */
 void ofApp::Redo() {
 	if (redo_allowed_ && !(redo_lines_.empty())) {
 		auto temp = redo_lines_.top();
@@ -189,10 +226,15 @@ void ofApp::Redo() {
 	}
 }
 
-// https://forum.openframeworks.cc/t/saving-a-fbo-to-an-image/10747
-// https://forum.openframeworks.cc/t/ofxfenster-addon-to-handle-multiple-windows-rewrite/6499/60
+/**
+ * Save method: draws to frame buffer (fbo), then saves pixels from fbo.
+ * Help reference:
+ * https://forum.openframeworks.cc/t/saving-a-fbo-to-an-image/10747
+ * https://forum.openframeworks.cc/t/ofxfenster-addon-to-handle-multiple-windows-rewrite/6499/60
+ */
 void ofApp::SaveImage() {
 	// Don't save with question mark
+	// Need boolean because draw() is called for fbo
 	print_q = false;
 
 	// Create fbo
@@ -204,12 +246,13 @@ void ofApp::SaveImage() {
 	// Get the frame buffer pixels  
 	ofPixels pixels;
     canvas_fbo_.readToPixels(pixels);
-    // Save  
+    // Save (using timestamp for unique filename)
 	std::string default_filename = "img" + ofGetTimestampString("%m-%d-%H-%M-%S-%i") + ".png"; 
     ofSaveImage(pixels, default_filename, OF_IMAGE_QUALITY_BEST);
-		// NOTE: warning says ofImageCompressionType says only applies to JPEGs, 
-		// but OF documentation for ofSaveImage() implies you can use it with png ???
-		// (so instead saves with default: OF_IMAGE_QUALITY_BEST)
+		// NOTE: wanted to change quality but then there's a warning that says 
+		// ofImageCompressionType only applies to JPEGs, but OF documentation 
+		// for ofSaveImage() implies you can use it with png ???
+	
 	// Print save message in toolgui
 	ofResetElapsedTimeCounter();
 	print_save_message_ = true;
@@ -218,6 +261,11 @@ void ofApp::SaveImage() {
 	print_q = true;
 }
 
+/**
+ * Used to set up the instructions.
+ * Note: tried to just initialize string, but it wasn't compiling, so this 
+ * uses a stringstream
+ */
 void ofApp::SetupInstructions() {
 	instructions_ << "DRAWING INSTRUCTIONS:" << std::endl << std::endl;
 	instructions_ << "1) Click once to put down pen" << std::endl;
@@ -229,8 +277,10 @@ void ofApp::SetupInstructions() {
 	instructions_ << "pen: hue, saturation, brightness, and alpha" << std::endl;
 	instructions_ << "pencil: brightness, alpha" << std::endl;
 	instructions_ << "eraser: alpha" << std::endl << std::endl;
-	instructions_ << "'bounded' determines whether or not the line will" << std::endl;
+	instructions_ << "bounded: determines whether or not the line will" << std::endl;
 	instructions_ << "end once the mouse exits the canvas window" << std::endl << std::endl;
+	instructions_ << "set background color: changes background color of canvas" << std::endl;
+	instructions_ << "to the current color settings in the tool panel" << std::endl << std::endl;
 	instructions_ << "Keyboard shortcuts available (see tools panel for keys):" << std::endl;
 	instructions_ << "clear, undo, redo, save" << std::endl << std::endl;
 	instructions_ << "Some Notes:" << std::endl;
