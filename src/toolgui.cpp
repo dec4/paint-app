@@ -20,9 +20,8 @@ void ToolGui::setup() {
     tool_gui_width_ = ofGetWindowWidth();
     tool_gui_height_ = ofGetWindowHeight();
 
-    // Initialize background color to match canvas
-    //ofBackground(canvas->background_);
-    // TODO: decide: use default so that eraser preview can be seen?
+    // Initialize spiral line (used for preview)
+    InitializeSpiral();
 
     // Initialize drawing tools
     pen_ = new Pen();
@@ -42,15 +41,19 @@ void ToolGui::setup() {
     eraser_toggle_.addListener(this, &ToolGui::ChooseEraser);
 
     // Size parameters
-    gui_.add(radius_.setup("radius", 2, .5, 5));
-    gui_.add(thick_.setup("thicken stroke", false));
-    thick_.addListener(this, &ToolGui::ThickPressed);
+    gui_.add(radius_.setup("radius", 2, .5, 4));
 
     // Color parameters
     gui_.add(hue_.setup("hue", 150, 0, 255));
     gui_.add(saturation_.setup("saturation", 255, 0, 255));
     gui_.add(brightness_.setup("brightness", 255, 0, 255));
     gui_.add(alpha_.setup("alpha", 255, 0, 255));
+
+    // Unbounded
+    // Determines whether or not the line should end when the 
+    // mouse is drawing and exits the window
+    gui_.add(can_exit_.setup("bounded", true));
+    can_exit_.addListener(this, &ToolGui::ExitPressed);
 
     // Clear
     gui_.add(clear_.setup("clear canvas (c)"));
@@ -78,7 +81,9 @@ void ToolGui::update() {
 
 void ToolGui::draw() {
     ofSetColor(color_);
-    ofDrawCircle(0.5*tool_gui_width_, 0.85*tool_gui_height_, radius_);
+    ofSetLineWidth(radius_*2);
+    spiral_.draw();
+    ofDrawCircle(0.5*tool_gui_width_, 0.87*tool_gui_height_, radius_);
 	gui_.draw();
     if (canvas->print_save_message_) {
         ofSetColor(0, 0, 0);
@@ -108,6 +113,18 @@ void ToolGui::keyPressed(int key) {
 
 
 //*** PRIVATE METHODS ***//
+
+void ToolGui::InitializeSpiral() {
+    int startx = 0;
+    int starty = 0.85*tool_gui_height_;
+    spiral_.addVertex(startx, starty, 0);
+    // (0.1tsin(t),0.1tcos(t))
+    for (float i = 0; i < tool_gui_width_; i++) {
+        float x = startx + i;
+        float y = starty + 10*sin(0.1*i);
+        spiral_.addVertex(x, y, 0);
+    }
+}
 
 void ToolGui::UpdateGui() {
     hue_ = current_tool_->LastHue();
@@ -171,8 +188,8 @@ void ToolGui::ChooseEraser(bool& active) {
     }
 }
 
-void ToolGui::ThickPressed(bool& active) {
-    canvas->thicken_ = active;
+void ToolGui::ExitPressed(bool& active) {
+    canvas->bounded_ = active;
 }
 
 void ToolGui::ClearPressed() {

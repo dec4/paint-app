@@ -22,7 +22,7 @@ public:
 
     void SaveLastState(int hue, int saturation, int brightness, int alpha);
 
-//private:
+protected:
     int hue_min_;
     int hue_max_;
     int saturation_min_;

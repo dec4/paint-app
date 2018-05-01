@@ -9,12 +9,6 @@ class ofApp;
 
 class ToolGui : public ofBaseApp {
 
-	enum ToolType { // TODO: MAKE PUBLIC AND RENAME TO TOOL TYPE
-		PENCIL,
-		PEN,
-		ERASER
-	};
-
 	public:
 
 		// Main OpenFrameworks loop
@@ -38,6 +32,10 @@ class ToolGui : public ofBaseApp {
 		// Background color
 		//ofColor* background_;
 
+		// Spiral preview
+		ofPolyline spiral_;
+		void InitializeSpiral();
+
 		// For keyboard shortcuts
 		void keyPressed(int key);
 
@@ -46,9 +44,10 @@ class ToolGui : public ofBaseApp {
 		ofxToggle pen_toggle_;
 		ofxToggle pencil_toggle_;
 		ofxToggle eraser_toggle_;
-		// Size modifiers
+		// Size modifier
 		ofxFloatSlider radius_;
-		ofxToggle thick_;
+		// Exit without ending line
+		ofxToggle can_exit_;
 		// Color sliders
 		ofxIntSlider hue_;
 		ofxIntSlider saturation_;
@@ -81,7 +80,7 @@ class ToolGui : public ofBaseApp {
 		void UpdateGui();
 
 		// Other listeners
-		void ThickPressed(bool& active);
+		void ExitPressed(bool& active);
 		void ClearPressed();
 		void UndoPressed();
 		void RedoPressed();

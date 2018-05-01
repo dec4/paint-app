@@ -22,7 +22,7 @@ int main( ) {
 
 	// Settings for second window: tools
 	settings.width = 220;
-	settings.height = 350;
+	settings.height = 360;
 	settings.setPosition(ofVec2f(900,0));
 	settings.resizable = false;
 	shared_ptr<ofAppBaseWindow> tool_window = ofCreateWindow(settings);
