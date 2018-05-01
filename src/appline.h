@@ -8,15 +8,8 @@
 class AppLine {
 public:
     // Constructors (and initializations)
-    AppLine() {
-        line_ = new ofPolyline();
-    }
-    explicit AppLine(ofPoint& start_point, ofColor& color, float& radius) {
-        color_ = color;
-        radius_ = radius;
-        line_ = new ofPolyline();
-        line_->addVertex(start_point);
-    };
+    AppLine();
+    AppLine(ofPoint& start_point, ofColor& color, float& radius);
 
     // Getters
     ofPolyline GetLine();

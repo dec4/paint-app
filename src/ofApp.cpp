@@ -36,7 +36,7 @@ void ofApp::draw() {
 	// Print instructions; returns when done so that drawing does not block words
 	if (print_instructions_) {
 		// Depending on background lightness, make text white or black for readability
-		(background_.getLightness() > 100) ? ofSetColor(0) : ofSetColor(255);
+		(background_.getLightness() > 130) ? ofSetColor(0) : ofSetColor(255);
 		ofDrawBitmapString(instructions_.str(), 20, 20);
 		return;
 	}
@@ -55,7 +55,7 @@ void ofApp::draw() {
 	// section is controlled by a boolean so that it does not draw on saved image
 	if (print_q) {
 		// Depending on background lightness, make text white or black for readability
-		(background_.getLightness() > 100) ? ofSetColor(0) : ofSetColor(255);
+		(background_.getLightness() > 130) ? ofSetColor(0) : ofSetColor(255);
 		ofFill();
 		help_button_.drawString("?", canvas_width_-20, 20);
 		ofNoFill();
@@ -279,8 +279,8 @@ void ofApp::SetupInstructions() {
 	instructions_ << "eraser: alpha" << std::endl << std::endl;
 	instructions_ << "bounded: determines whether or not the line will" << std::endl;
 	instructions_ << "end once the mouse exits the canvas window" << std::endl << std::endl;
-	instructions_ << "set background color: changes background color of canvas" << std::endl;
-	instructions_ << "to the current color settings in the tool panel" << std::endl << std::endl;
+	instructions_ << "set background color: changes background color of canvas to the" << std::endl;
+	instructions_ << "current hsb settings in the tool panel (alpha = 255)" << std::endl << std::endl;
 	instructions_ << "Keyboard shortcuts available (see tools panel for keys):" << std::endl;
 	instructions_ << "clear, undo, redo, save" << std::endl << std::endl;
 	instructions_ << "Some Notes:" << std::endl;

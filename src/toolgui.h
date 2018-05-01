@@ -35,7 +35,8 @@ class ToolGui : public ofBaseApp {
 		void InitializeWave();
 
 		// For keyboard shortcuts
-		// Shortcuts for actions only (clear, undo, redo, save)
+		// Shortcuts for actions only:
+		// clear (c), undo (u), redo (r), save (s)
 		void keyPressed(int key);
 
 		ofxPanel settings_gui_;

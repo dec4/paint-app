@@ -54,7 +54,8 @@ public:
 	bool redo_allowed_ = false;  // Can't redo something that was overwritten
 
 	// For keyboard shortcuts
-	// Shortcuts for actions only (clear, undo, redo, save)
+	// Shortcuts for actions only
+	// clear (c), undo (u), redo (r), save (s)
 	void keyPressed(int key);
 
 	// Determines whether or not to end line when mouse exits window

@@ -60,19 +60,19 @@ void ToolGui::setup() {
     background_.addListener(this, &ToolGui::BackgroundPressed);
 
     // Clear
-    settings_gui_.add(clear_.setup("clear canvas (c)"));
+    settings_gui_.add(clear_.setup("c: clear canvas"));
     clear_.addListener(this, &ToolGui::ClearPressed);
 
     // Undo
-    settings_gui_.add(undo_.setup("undo (u)"));
+    settings_gui_.add(undo_.setup("u: undo"));
     undo_.addListener(this, &ToolGui::UndoPressed);
 
     // Redo
-    settings_gui_.add(redo_.setup("redo (r)"));
+    settings_gui_.add(redo_.setup("r: redo"));
     redo_.addListener(this, &ToolGui::RedoPressed);
 
     // Save
-    settings_gui_.add(save_.setup("save image (s)"));
+    settings_gui_.add(save_.setup("s: save image"));
     save_.addListener(this,  &ToolGui::SavePressed);
 }
 
