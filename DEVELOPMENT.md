@@ -26,3 +26,10 @@ Starting off by implementing the settings window and drawing canvas independentl
     * Now useing ofFbo
 * Added keyboard shortcuts; functions can be called from either canvas or toolgui
 * Note: not using custom hsbaColor object anymore (wanted to use ofParameter with it, but couldn't figure out how ofParameter creates sliders just with ofColor object, therefore couldn't figure out how to duplicate using custom object)
+### Week 3 <br />
+* Using drawing tool object where each tool type has its own class with the default initializations
+* Added help button to display information about how to use the app
+* Added toggle to determine whether or not the canvas is bounded
+* Added ability to change background color
+* Modified slightly to draw depending on display enum
+  * Added timed mode that allows the user to draw on canvas the same way, but prints a bar at the bottom containing a noun to draw and the time it's taking for them to draw
