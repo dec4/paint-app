@@ -52,6 +52,9 @@ paint.qbs
 
 final-project-dec4.qbs
 
+#vsCode Files
+.vscode/*
+
 #Keep bin/data
 bin/libs/*
 bin/data/savedimages/*
