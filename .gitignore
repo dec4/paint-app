@@ -44,10 +44,17 @@ packages/*
 packages.config
 
 #Xcode Files
-Makefile
+#Makefile <- keep
 Project.xcconfig
 config.make
-of-snake.xcodeproj/*
+addons.make
 openFrameworks-Info.plist
+paint.qbs
 
 final-project-dec4.qbs
+
+#Keep bin/data
+!bin/data/*
+bin/data/savedimages/*
+!bin/data/savedimages/img05-02-10-35-59-327.png
+
