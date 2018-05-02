@@ -53,8 +53,7 @@ paint.qbs
 final-project-dec4.qbs
 
 #Keep bin/data
-bin/*
-!bin/data/*
+bin/libs/*
 bin/data/savedimages/*
 !bin/data/savedimages/img05-02-10-35-59-327.png
 
