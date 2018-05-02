@@ -59,6 +59,7 @@ class ToolGui : public ofBaseApp {
 		ofxButton undo_;
 		ofxButton redo_;
         ofxButton save_;
+		ofxButton exit_;
 
 		// Keep track of current color for easy access
 		// Updated using hsba slider info in update()
@@ -87,5 +88,6 @@ class ToolGui : public ofBaseApp {
 		void UndoPressed();
 		void RedoPressed();
 		void SavePressed();
+		void ExitPressed();
 };
 

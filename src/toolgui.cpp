@@ -72,8 +72,12 @@ void ToolGui::setup() {
     redo_.addListener(this, &ToolGui::RedoPressed);
 
     // Save
-    settings_gui_.add(save_.setup("s: save image"));
+    settings_gui_.add(save_.setup("s: save & finish"));
     save_.addListener(this,  &ToolGui::SavePressed);
+
+    // Exit
+    settings_gui_.add(exit_.setup("exit to start"));
+    exit_.addListener(this,  &ToolGui::ExitPressed);
 }
 
 void ToolGui::update() { 
@@ -92,17 +96,7 @@ void ToolGui::draw() {
     ofSetLineWidth(radius_*2);
     wave_.draw();
     // Draw circle (preview)
-    ofDrawCircle(0.5*tool_gui_width_, 0.87*tool_gui_height_, radius_);
-
-    // Draw "Image Saved!" if necessary
-    if (canvas->print_save_message_) {
-        ofSetColor(0, 0, 0);
-	    ofDrawBitmapString("Image Saved!", 0.3*tool_gui_width_, 0.95*tool_gui_height_);
-        // Only display for two seconds
-        if (ofGetElapsedTimeMillis() > 2000) {  // elapsed time is reset in Save()
-            canvas->print_save_message_ = false;
-        }
-    }
+    ofDrawCircle(0.5*tool_gui_width_, 0.92*tool_gui_height_, radius_);
 }
 
 
@@ -237,6 +231,13 @@ void ToolGui::SavePressed() {
     canvas->SaveImage();
 }
 
+/**
+ * Listener function for exit button.
+ */
+void ToolGui::ExitPressed() {
+    canvas->ResetToStart();
+}
+
 
 //----- PRIVATE METHODS -----//
 
@@ -248,7 +249,7 @@ void ToolGui::SavePressed() {
 void ToolGui::InitializeWave() {
     // Start of wave
     int startx = 0;
-    int starty = 0.85*tool_gui_height_;
+    int starty = 0.9*tool_gui_height_;
     wave_.addVertex(startx, starty, 0);
     // Wave goes across width of tool gui
     for (float i = 0; i < tool_gui_width_; i+=5) {

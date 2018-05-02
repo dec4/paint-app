@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "toolgui.h"
 #include "appline.h"
+#include "randomnoun.h"
 #include <stack>
 #include <vector>
 #include <string>
@@ -11,6 +12,22 @@
 class ToolGui;
 
 class ofApp : public ofBaseApp {
+
+	// enum to track which screen to draw
+	// Note: difference between TIMED and FREE
+	//	TIMED: generates random noun and times how long you take to draw it
+	//	FREE: same drawing canvas, no time, no prompt
+	enum DisplayMode {
+		START,
+		TIMED,
+		FREE,
+		TIMED_END,
+		FREE_END
+	};
+
+	// Track current display mode
+	DisplayMode current_display_ = START;
+
 public:
 	// Main OpenFrameworks loop
 	void setup();
@@ -19,8 +36,8 @@ public:
 
 	// Store window size in variables
 	void windowResized(int w, int h);
-	int canvas_width_;
-	int canvas_height_;
+	float canvas_width_;
+	float canvas_height_;
 
 	// Store background color
 	ofColor background_ = ofColor(255, 255, 255);
@@ -63,7 +80,6 @@ public:
 
 	// For saving image to file:
 	ofFbo canvas_fbo_;
-	bool print_save_message_ = false;
 	void SaveImage();
 
 	// For printing drawing instructions:
@@ -74,4 +90,64 @@ public:
 	ofRectangle help_click_zone_; //------ Area that when clicked inside, draws instructions
 	bool print_instructions_ = false; //-- Determine whether or not to print instructions
 	bool print_q = true; //--------------- Determine whether or not to print ICON ("?")
+
+
+
+	/**
+	 * NOTE: everything below this point is an addition to original project proposal
+	 */
+
+
+	// SetupStart allocates and loads font info for the text being displayed in START
+	void SetupStart();
+	ofTrueTypeFont welcome_;
+	ofTrueTypeFont choose_mode_;
+	ofTrueTypeFont time_;
+	ofTrueTypeFont free_;
+	// Updated in DrawStart
+	ofRectangle time_click_zone_;
+	ofRectangle free_click_zone_;
+
+	// SetupEnd, like SetupStart, allocates and loads font info for the text 
+	// being displayed in both TIMED_END and FREE_END
+	void SetupEnd();
+	ofTrueTypeFont image_saved_;
+	ofTrueTypeFont restart_;
+	ofTrueTypeFont draw_more_;
+	// Updated in DrawTimedEnd and DrawFreeEnd
+	ofRectangle restart_click_zone_;
+	ofRectangle draw_more_click_zone_;
+
+	// Draw functions for each display mode
+	// Note some rely on each other (especially on DrawFree) because
+	// they are all very similar, just with slight adjustments
+	void DrawStart();
+	void DrawFree();
+	void DrawTimed();
+	void DrawTimedEnd();
+	void DrawFreeEnd();
+
+	// Act as listener functions for when the mouse is clicked in 
+	// the respective display mode
+	void PressedInStart(ofPoint& point);
+	void PressedInTimedEnd(ofPoint& point);
+	void PressedInFreeEnd(ofPoint& point);
+
+	// Used for timed mode
+	RandomNoun random_noun_;
+	void SetupRandomNoun(); // called when timed is pressed in START
+	float time_to_complete_;
+
+	// Starts as false so that when the image is saved, it doesn't save
+	// with reset buttons on top (is set to true at end of SaveImage)
+	bool draw_reset_buttons_ = false;
+
+	// Draw certain reset buttons (depends on display mode). i.e. DrawTimedEnd
+	// does not have "draw more", but DrawFreeEnd does
+	void DrawImageSaved();
+	void DrawRestart();
+	void DrawDrawMore();
+
+	// Helper method called when the ToolGui button 'exit_' is pressed
+	void ResetToStart();
 };
