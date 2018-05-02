@@ -1,0 +1,12 @@
+<group>
+	<pencil>0</pencil>
+	<pen>1</pen>
+	<eraser>0</eraser>
+	<radius>2</radius>
+	<hue>80</hue>
+	<saturation>255</saturation>
+	<brightness>255</brightness>
+	<alpha>255</alpha>
+	<bounded>1</bounded>
+<group/>
+</group>
