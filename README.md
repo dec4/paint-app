@@ -3,7 +3,7 @@ For my final project, I have created a drawing application. This app allows you 
 ## Installation and Deployment <br />
 First, you will need to download [OpenFrameworks](http://openframeworks.cc/download/) <br />
 Once you have that, download this repository and move it to the directory OF/apps/myApps/ <br />
-Using the project generator, import this project folder and click update. <br />
+Using the project generator, import this folder. Add ofxGui as an Addon then click update. <br />
 Now you should be able to run the application from the command-line. <br />
 ```
 $ cd {path to project}
