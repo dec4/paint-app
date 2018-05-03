@@ -16,4 +16,12 @@ $ makeRunRelease
 #### Free Draw: <br />
 ![picture](bin/screenshots/ScreenshotFree.png) <br />
 #### Timed Draw: <br />
-![picture](bin/screenshots/ScreenshotTimed.png)
+![picture](bin/screenshots/ScreenshotTimed.png) <br />
+## Testing <br />
+The large majority of this project relies heavily on OpenFrameworks methods (drawing to the screen, listening to mouse events, etc.). Due to this, I tested my program using manual testing. <br /> 
+Some general things that were tested include:
+* Drawing various lines with different settings changed in the tools window
+* Ensuring that specific settings in the tool gui are locked when applicable (for example, you can't change the hue when pencil tool is selected)
+* Test button functionalities (especially undo and redo, making sure the correct things are removed and placed)
+* Checking that keyboard shortcuts work
+* Proper switching between display modes depending on what button was pressed, if at all.
