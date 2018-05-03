@@ -6,9 +6,9 @@ Once you have that, download this repository and move it to the directory OF/app
 Using the project generator, import this project folder and click update. <br />
 Now you should be able to run the application from the command-line. <br />
 ```
-cd {path to project}
-make
-makeRunRelease
+$ cd {path to project}
+$ make
+$ makeRunRelease
 ```
 ## Screenshots <br />
 #### Home Screen: <br />
