@@ -8,7 +8,7 @@ Now you should be able to run the application from the command-line. <br />
 ```
 $ cd {path to project}
 $ make
-$ makeRunRelease
+$ make RunRelease
 ```
 ## Screenshots <br />
 #### Home Screen: <br />
